@@ -1,0 +1,29 @@
+@import '../format';
+
+.form {
+  width: 100%;
+  margin-top: $margin_sm;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  .form-group {
+    border: 1px solid transparent;
+    // padding: $padding_xs;
+  }
+
+  .v-input__control {
+    border: 1px solid transparent;
+  }
+
+  .v-field {
+    padding: $padding_xs;
+    border: 1px solid red;
+    border-radius: 2rem;
+  }
+
+  .v-input__details {
+    background-color: pink;
+    display: none;
+  }
+}

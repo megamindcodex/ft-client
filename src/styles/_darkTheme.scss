@@ -1,0 +1,10 @@
+$mainColor: #000;
+
+$bg-dark: scale-color($mainColor, $lightness: 12%);
+$text-light: scale-color($mainColor, $lightness: 88%);
+
+.dark-theme {
+  background-color: $bg-dark;
+  color: $text-light;
+  transition: 0.6s ease-in;
+}

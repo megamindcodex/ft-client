@@ -16,7 +16,7 @@ const router = createRouter({
       component: () => import('../views/HomeView.vue')
     },
     {
-      path: '/auth',
+      path: '/auth/:panel',
       name: 'auth',
       component: AuthPage
     }
@@ -41,7 +41,7 @@ router.beforeEach(async (to, from, next) => {
 
   if (to.name !== 'auth') {
     if (!isAuthenticated) {
-      next({ name: 'auth' })
+      next('/auth/login')
     } else {
       next()
     }

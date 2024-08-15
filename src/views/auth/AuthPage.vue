@@ -1,8 +1,19 @@
 <script setup>
-// import SignupForm from '@/components/auth/SignupForm.vue'
-// import LoginForm from '@/components/auth/LoginForm.vue'
-import { ref, onMounted, watch, watchEffect, shallowRef, defineAsyncComponent } from 'vue'
+import {
+  ref,
+  onMounted,
+  watch,
+  watchEffect,
+  shallowRef,
+  defineAsyncComponent,
+  reactive,
+  provide
+} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import AngleLeftASvgVue from '@/components/icons/AngleLeftASvg.vue'
+import AlertMsg from '@/components/AlertMsg.vue'
+import { useAlertStore } from '@/stores/alertStore'
+import { storeToRefs } from 'pinia'
 
 const LoginForm = defineAsyncComponent({
   loader: async () => import('../../components/auth/LoginForm.vue'),
@@ -12,60 +23,93 @@ const SignupForm = defineAsyncComponent({
   loader: async () => import('../../components/auth/SignupForm.vue'),
   suspensible: false
 })
-const SendCode = defineAsyncComponent({
-  loader: async () => import('../../components/auth/SendCode.vue'),
-  suspensible: false
-})
-
 const ResetForm = defineAsyncComponent({
   loader: async () => import('../../components/auth/ResetForm.vue'),
   suspensible: false
 })
 
+const alertStore = useAlertStore()
+const { toggleAlert } = alertStore
+const { alertData, displayAlert } = storeToRefs(alertStore)
+
 const route = useRoute()
 const router = useRouter()
-const currentHash = ref(null)
+const currentParams = ref(null)
 const currentComponent = shallowRef(null)
 const panelName = ref(null)
+const title = ref(null)
+const subtitle = ref(null)
 
-const navigateTo = async (hashName) => {
-  currentHash.value = hashName
-  await router.push({ path: '/auth', hash: hashName })
-  switchPanel()
-  // console.log(route.hash)
+const alertDataProps = ref(null)
+watch(displayAlert, () => {
+  alertDataProps.value = alertData.value
+  console.log(alertDataProps.value)
+})
+
+provide('displayAlert', displayAlert)
+provide('alertDataProps', alertDataProps)
+
+const handleToggle = (data) => {
+  toggleAlert(data.type, data.message, data.state)
 }
 
+// const navigateTo = async () => {
+//   currentHash.value = hashName
+//   // await router.push({ path: '/auth', hash: hashName })
+//   await router.push({ path: '/auth', hash: currentHash.value })
+//   switchPanel()
+//   // console.log(route.hash
+// }
+
 const switchPanel = async () => {
-  if (currentHash.value === '#login') {
+  if (currentParams.value === 'login') {
     currentComponent.value = LoginForm
-    panelName.value = 'Login to your account'
-  } else if (currentHash.value === '#signup') {
+    panelName.value = 'Login'
+    title.value = 'Welcome back,'
+    subtitle.value = 'Login to access your account'
+  } else if (currentParams.value === 'signup') {
     currentComponent.value = SignupForm
     panelName.value = 'Sign up'
-  } else if (currentHash.value === '#send-code') {
-    panelName.value = 'Send reset code'
-    currentComponent.value = SendCode
-  } else if (currentHash.value === '#reset') {
+    title.value = 'Create an account'
+    subtitle.value = 'Welcome!, enter your details'
+  } else if (currentParams.value === 'reset') {
     currentComponent.value = ResetForm
     panelName.value = 'Reset password'
+    title.value = 'create new password'
   }
 }
 
-watchEffect(() => {
-  currentHash.value = route.hash
+watch(route, () => {
+  currentParams.value = route.params.panel
   switchPanel()
+  toggleAlert('', '', false)
 })
 
 onMounted(async () => {
-  await navigateTo({ path: '/auth', hash: currentHash.value })
-  currentHash.value = route.hash
+  currentParams.value = route.params.panel
+  switchPanel()
+  console.log(route.params.panel)
+  // toggleAlert('success', 'test', true)
 })
 </script>
 
 <template>
-  <div>
-    <span>{{ panelName }}</span>
-    <component :is="currentComponent"></component>
+  <div class="cont" v-motion-slide-visible-top>
+    <div class="header">
+      <div>
+        <AngleLeftASvgVue @click="router.go(-1)" />
+        <span> {{ panelName }}</span>
+      </div>
+
+      <Teleport to="#alert">
+        <AlertMsg v-if="displayAlert" :data="alertDataProps" v-motion-slide-top />
+      </Teleport>
+
+      <span class="title">{{ title }}</span>
+      <span class="subtitle" v-show="subtitle != null">{{ subtitle }}</span>
+    </div>
+
+    <component :is="currentComponent" @toggleAlert="handleToggle"></component>
   </div>
 
   <!-- <suspense> -->
@@ -73,13 +117,63 @@ onMounted(async () => {
 </template>
 <style lang="scss" scoped>
 @import '../../styles//format';
-div {
+.cont {
   width: 100%;
+  height: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: $margin_md;
+  // margin-top: $margin_md;
   // border: 1px solid red;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  div {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 1rem;
+    span {
+      font-size: 1.2rem;
+      margin: 0;
+    }
+  }
+}
+
+.title {
+  font-size: 2em;
+  margin-top: $margin_xs + 5;
+}
+
+.subtitle {
+  font-size: $font_xs;
+}
+
+.input-error-fade-enter-from {
+  opacity: 0;
+  transform: translateY(-15px);
+}
+
+.input-error-fade-enter-to {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.input-error-fade-enter-active {
+  transition: 0.1s ease-in;
+}
+
+.input-error-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-15px);
+}
+
+.input-error-fade-leave-active {
+  transition: 0.1s ease-in;
 }
 </style>

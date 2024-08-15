@@ -12,6 +12,49 @@
   margin: 0;
 }
 
+a {
+  cursor: pointer;
+  color: #1677fe;
+  text-decoration: none;
+}
+
 #main {
-  padding: $padding_xs;
+  padding: $padding_base + 8;
+
+  // .alert {
+  //   position: sticky;
+  //   top: 1rem;
+  //   bottom: 10rem;
+  //   width: 100%;
+  //   // padding: 5px;
+
+  //   .info {
+  //     color: #1f3b72;
+  //     background-color: #7da0e6;
+  //     border: 2px solid #1f3b72;
+  //   }
+
+  //   .success {
+  //     color: #144b26;
+  //     background-color: #60d685;
+  //     border: 2px solid #144b26;
+  //   }
+
+  //   .warn {
+  //     color: #7e511f;
+  //     background-color: #ff8800;
+  //     border: 2px solid #7e511f;
+  //   }
+
+  //   .error {
+  //     // color: #fff;
+  //     color: #8d0d15;
+  //     background-color: #d56066;
+  //     border: 2px solid #8d0d15;
+  //   }
+
+  //   span {
+  //     font-size: $font_base + 10;
+  //   }
+  // }
 }

@@ -6,4 +6,9 @@ $bg-light: scale-color($mainColor, $lightness: -7%);
   background-color: $bg-light;
   color: #000;
   transition: 0.6s ease-in;
+
+  // label {
+  //   background-color: $bg-light;
+  //   color: #000;
+  // }
 }

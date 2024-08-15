@@ -1,10 +1,16 @@
 <script setup>
 import { useGlobalStore } from '@/stores/globalStore'
 import { storeToRefs } from 'pinia'
-import { onMounted } from 'vue'
+import { computed, onMounted, ref, watch, watchEffect } from 'vue'
+import AlertMsg from '@/components/AlertMsg.vue'
+import { useAlertStore } from '@/stores/alertStore'
 
-const { applyTheme, toggleTheme } = useGlobalStore()
+const alertStore = useAlertStore()
+const { toggleAlert } = alertStore
+const { text, displayAlert } = storeToRefs(alertStore)
+
 const globalStore = useGlobalStore()
+const { applyTheme, toggleTheme } = globalStore
 const { themeTxt } = storeToRefs(globalStore)
 
 onMounted(() => {
@@ -14,10 +20,16 @@ onMounted(() => {
 
 <template>
   <v-app id="main">
-    <button @click="toggleTheme">{{ themeTxt }}</button>
+    <!-- <div class="alert error">
+      <AlertMsg v-if="displayAlert" @showAlert="toggleAlert" />
+    </div> -->
     <RouterView />
+    <!-- <button @click="toggleTheme">{{ themeTxt }}</button> -->
   </v-app>
 </template>
 
-<style scoped>
+<style lang="css" scoped>
+.alert {
+  top: 0;
+}
 </style>

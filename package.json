@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@vueuse/core": "^10.11.0",
+    "@vueuse/motion": "^2.2.3",
     "axios": "^1.7.2",
     "pinia": "^2.1.7",
     "socket.io-client": "^4.7.5",

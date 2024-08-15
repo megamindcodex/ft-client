@@ -4,7 +4,6 @@ import apiClient from '../api/apiConfig'
 
 import { useChatStore } from '@/stores/sockets/chat'
 import { useNewsStore } from '@/stores/sockets/news'
-import { formatDate } from '@vueuse/core'
 
 export const useUserStore = defineStore('userStore', () => {
   const userData = ref(null)
@@ -15,16 +14,18 @@ export const useUserStore = defineStore('userStore', () => {
 
   const registerUser = async (formData) => {
     try {
-      console.log(formData)
-      const response = await apiClient.post('/auth/sign-up', formData)
+      // console.log(formData)
+      const res = await apiClient.post('/auth/sign-up', formData)
 
-      if (response.status !== 201) {
-        return { success: false, error: response.error }
+      if (res.status != 201) {
+        // console.log(response)
+        return { success: false, error: res.error }
       }
-      return { success: true, data: response.data }
+      console.log(res)
+      return { success: true, data: res.data.message }
     } catch (err) {
-      console.error('error signing in', err)
-      return { success: false, error: 'Internal server error. oops...Something is wrong' }
+      console.error('error signing in', err.response.data.error)
+      return { success: false, error: err.response.data.error }
     }
   }
 
@@ -33,14 +34,11 @@ export const useUserStore = defineStore('userStore', () => {
       // console.log(formData)
       const res = await apiClient.post('/auth/login', formData)
 
-      if (res.status === 404 || res.status === 400 || res.status === 401) {
-        throw new Error(res.error)
-      } else if (res.status === 500) {
-        throw new Error('Internal server Error, try again later')
+      if (res.status != 200) {
+        return { success: false, error: res.error }
       }
-
-      // console.log(res)
-      return { success: true, data: res.data }
+      console.log(res)
+      return { success: true, data: res.data.message }
     } catch (err) {
       console.error('error logging in', err)
       return { success: false, error: err.response.data.error }
@@ -65,6 +63,39 @@ export const useUserStore = defineStore('userStore', () => {
     }
   }
 
+  // send reset code Function
+  const send_reset_code = async (email) => {
+    try {
+      const res = await apiClient.post('/auth/send_reset_code', { email: email })
+
+      if (res.status !== 200) {
+        console.log(res)
+        return { success: false, error: res.error }
+      }
+
+      return { success: true, data: res.data }
+    } catch (err) {
+      console.error('error Sending Reset code', err)
+      return { success: false, error: err.response.data.errors }
+    }
+  }
+
+  // reset passowrd code Function
+
+  const reset_password = async (formatDate) => {
+    try {
+      const res = await apiClient.post('/auth/reset_password', formatDate)
+
+      if (res.status === 200) {
+        return { success: true, data: res.data }
+      }
+    } catch (err) {
+      console.error('error reset password', err)
+      console.log(err.response.data.error)
+      return { success: false, error: err.response.data.error }
+    }
+  }
+
   const connect_to_websockets = async (userName) => {
     try {
       await connect_to_chat_socket(userName)
@@ -79,6 +110,8 @@ export const useUserStore = defineStore('userStore', () => {
     registerUser,
     loginUser,
     getUserData,
-    connect_to_websockets
+    connect_to_websockets,
+    send_reset_code,
+    reset_password
   }
 })

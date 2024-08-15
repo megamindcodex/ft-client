@@ -1,21 +1,36 @@
 // Padding formt
-$padding_xs: 10px;
-$padding_sm: 15px;
-$padding_md: 50px;
-$padding_lg: 70px;
-$padding_xl: 90px;
+$padding_base: 10px;
+$padding_xs: $padding_base + 10px;
+$padding_sm: $padding_base + 20px;
+$padding_md: $padding_base + 30px;
+$padding_lg: $padding_base + 40px;
+$padding_xl: $padding_base + 50px;
+$padding_xxl: $padding_base + 60px;
 
 // Margin format
-$margin: 10px;
-$margin_sm: 30px;
-$margin_md: 50px;
-$margin_lg: 70px;
-$margin_xl: 90px;
+$margin_base: 10px;
+$margin_xs: $margin_base + 10px;
+$margin_sm: $margin_base + 20px;
+$margin_md: $margin_base + 30px;
+$margin_lg: $margin_base + 40px;
+$margin_xl: $margin_base + 50px;
+$margin_xxl: $margin_base + 60px;
 
 // Border format
-$bRadius_xs: 30px;
-// $bRadius_sm:;
-// $bRadius_md:;
-// $bRadius_lg:;
-// $bRadius_xl:;
-// $bRadius_xxl:;
+$bRadius_base: 2px;
+$bRadius_xs: $padding_base + 2px;
+$bRadius_sm: $bRadius_base + 4px;
+$bRadius_md: $bRadius_base + 8px;
+$bRadius_lg: $bRadius_base + 16px;
+$bRadius_xl: $bRadius_base + 34px;
+$bRadius_xxl: $bRadius_base + 68px;
+
+// Font Size Format
+$font_base: 10px;
+$font_xs: $font_base + 10px;
+$font_sm: $font_base + 20px;
+$font_md: $font_base + 30px;
+$font_lg: $font_base + 40px;
+$font_xl: $font_base + 50px;
+$font_xxl: $font_base + 60px;
+$font_sub_btn: $font_base + 12.5px;

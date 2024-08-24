@@ -15,6 +15,18 @@ import AlertMsg from '@/components/AlertMsg.vue'
 import { useAlertStore } from '@/stores/alertStore'
 import { storeToRefs } from 'pinia'
 
+const route = useRoute()
+const router = useRouter()
+const currentParams = ref(null)
+const currentComponent = shallowRef(null)
+const panelName = ref(null)
+const title = ref(null)
+const subtitle = ref(null)
+
+const alertStore = useAlertStore()
+const { toggleAlert } = alertStore
+const { alertData, displayAlert } = storeToRefs(alertStore)
+
 const LoginForm = defineAsyncComponent({
   loader: async () => import('../../components/auth/LoginForm.vue'),
   suspensible: false
@@ -27,18 +39,6 @@ const ResetForm = defineAsyncComponent({
   loader: async () => import('../../components/auth/ResetForm.vue'),
   suspensible: false
 })
-
-const alertStore = useAlertStore()
-const { toggleAlert } = alertStore
-const { alertData, displayAlert } = storeToRefs(alertStore)
-
-const route = useRoute()
-const router = useRouter()
-const currentParams = ref(null)
-const currentComponent = shallowRef(null)
-const panelName = ref(null)
-const title = ref(null)
-const subtitle = ref(null)
 
 const alertDataProps = ref(null)
 watch(displayAlert, () => {
@@ -88,13 +88,13 @@ watch(route, () => {
 onMounted(async () => {
   currentParams.value = route.params.panel
   switchPanel()
-  console.log(route.params.panel)
+  console.log(route.name)
   // toggleAlert('success', 'test', true)
 })
 </script>
 
 <template>
-  <div class="cont" v-motion-slide-visible-top>
+  <div class="cont">
     <div class="header">
       <div>
         <AngleLeftASvgVue @click="router.go(-1)" />
@@ -108,8 +108,11 @@ onMounted(async () => {
       <span class="title">{{ title }}</span>
       <span class="subtitle" v-show="subtitle != null">{{ subtitle }}</span>
     </div>
-
-    <component :is="currentComponent" @toggleAlert="handleToggle"></component>
+    <component
+      :is="currentComponent"
+      @toggleAlert="handleToggle"
+      v-motion-slide-visible-top
+    ></component>
   </div>
 
   <!-- <suspense> -->
@@ -124,6 +127,7 @@ onMounted(async () => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: $padding_base + 8;
   // margin-top: $margin_md;
   // border: 1px solid red;
 }

@@ -22,9 +22,9 @@
 </script>
 
 <style lang="scss" scoped>
-svg {
-  position: absolute;
-  top: 50%;
-  right: 0.8rem;
-}
+// svg {
+//   position: absolute;
+//   top: 50%;
+//   right: 0.8rem;
+// }
 </style>

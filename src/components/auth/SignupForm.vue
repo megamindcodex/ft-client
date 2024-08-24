@@ -51,32 +51,32 @@ const formData = reactive({
 
 // All fields validation result
 const fullnameValidation = ref({ valid: null, error: false, message: '' })
-const emailValidation = ref({ valid: true, error: false, message: '' })
-const usernameValidation = ref({ valid: true, error: false, message: '' })
-const phonenumberValidation = ref({ valid: true, error: false, message: '' })
-const passwordValidation = ref({ valid: true, error: false, message: '' })
+const emailValidation = ref({ valid: null, error: false, message: '' })
+const usernameValidation = ref({ valid: null, error: false, message: '' })
+const phonenumberValidation = ref({ valid: null, error: false, message: '' })
+const passwordValidation = ref({ valid: null, error: false, message: '' })
 
 // validate filed function
-const validateFiled = async (filed) => {
-  if (filed === 'fullName') {
+const validateFiled = async (field) => {
+  if (field === 'fullName') {
     fullnameValidation.value = validate_fullName(formData.fullName)
   }
-  if (filed === 'email') {
+  if (field === 'email') {
     emailValidation.value = validate_email(formData.email)
   }
-  if (filed === 'userName') {
+  if (field === 'userName') {
     usernameValidation.value = validate_userName(formData.userName)
   }
-  if (filed === 'phoneNumber') {
+  if (field === 'phoneNumber') {
     phonenumberValidation.value = validate_phoneNumber(formData.phoneNumber)
   }
-  if (filed === 'password') {
+  if (field === 'password') {
     passwordValidation.value = validate_password(formData.password)
   }
 }
 
 // validate all filed simultaneously
-const validateForm = () => {
+const validateForm = async () => {
   validateFiled('fullName')
   validateFiled('email')
   validateFiled('userName')
@@ -95,7 +95,7 @@ const validateForm = () => {
 
 // submit form
 const submitForm = async () => {
-  const isFormValid = validateForm()
+  const isFormValid = await validateForm()
   if (!isFormValid) {
     await toggleAlert('error', 'Form is not valid!', true)
     return console.error('form is not valid!')

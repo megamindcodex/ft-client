@@ -25,7 +25,11 @@ const { navigateTo } = navigateStore
 
 const balace = computed(() => {
   if (isBalanceVisible.value && finances.value) {
-    return finances.value.mainBalance
+    if (!finances.mainBalance) {
+      return 0
+    } else {
+      return finances.value.mainBalance
+    }
   } else {
     return '****'
   }

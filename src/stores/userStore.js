@@ -6,6 +6,7 @@ import { useChatStore } from '@/stores/sockets/chat'
 import { useNewsStore } from '@/stores/sockets/news'
 import { useNotificationStore } from './sockets/notification'
 import { useRouter } from 'vue-router'
+import { errorMessages } from 'vue/compiler-sfc'
 
 export const useUserStore = defineStore('userStore', () => {
   const userData = ref({})
@@ -39,6 +40,7 @@ export const useUserStore = defineStore('userStore', () => {
         return { success: false, error: res.error }
       }
       console.log(res)
+      await mutate_userData(res.data.userData)
       return { success: true, data: res.data.message }
     } catch (err) {
       console.error('error signing in', err.response.data.error)
@@ -59,7 +61,7 @@ export const useUserStore = defineStore('userStore', () => {
       }
       console.log(res)
       await mutate_userData(res.data.userData)
-      return { success: true, data: res.data.userData, message: res.data.message }
+      return { success: true, message: res.data.message }
     } catch (err) {
       console.error('error logging in', err)
       return { success: false, error: err.response.data.error }
@@ -144,13 +146,32 @@ export const useUserStore = defineStore('userStore', () => {
   const mutate_userData = async (data) => {
     try {
       console.log("userData mutation")
+
+      if (!userData.value) {
+        return console.log("userData is empty")
+      }
       userData.value = data
+
+      if (!userData.value.finances) {
+        console.log("userData response finance is null ")
+      }
       finances.value = userData.value.finances
-      transactions.value = userData.value.transactions.messages.reverse()
-      notifications.value = userData.value.notifications.messages.reverse()
+
+      if (userData.value.transactions.messages.length > 0) {
+        transactions.value = userData.value.transactions.messages.reverse()
+      } else {
+        console.log("userData transactions messages is empty")
+      }
+
+      if (userData.value.notification.length > 0) {
+        notifications.value = userData.value.notifications.messages.reverse()
+      } else {
+        console.log("userData notifications messages is empty")
+      }
       console.log("tried mutating userDATA: ", userData.value)
+      return
     } catch (err) {
-      console.error("Error mutating user data", err)
+      console.error("Error mutating user data", err.message, err,)
     }
   }
 

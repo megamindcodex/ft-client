@@ -125,7 +125,7 @@ const submitForm = async () => {
   await toggleAlert('success', res.data, true)
   console.log(res.data.message)
   setTimeout(() => {
-    router.push({ name: 'home' })
+    router.push('/login')
   }, 5000)
 }
 

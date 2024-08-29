@@ -85,9 +85,9 @@ const submitForm = async () => {
 
   await toggleAlert('success', res.message, true)
   console.log(res.data)
-  setTimeout(() => {
-    router.push('/home')
-  }, 3000)
+  // setTimeout(() => {
+  router.push('/home')
+  // }, 3000)
 }
 </script>
 

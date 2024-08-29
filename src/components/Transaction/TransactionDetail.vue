@@ -3,19 +3,19 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useTransferStore } from '@/stores/transferStore'
+import { useUserStore } from '@/stores/userStore'
 import { useNavigatorStore } from '@/stores/navigatorStore'
 import { storeToRefs } from 'pinia'
 import { DateTime } from 'luxon'
 
-import AngleLeftASvg from '../icons/AngleLeftASvg.vue'
+import ChevronLeftSvg from '../icons/ChevronLeftSvg.vue'
 
 const navigateStore = useNavigatorStore()
-const { navigateTo } = navigateStore
+const { navigateTo, navigateBack } = navigateStore
 
-const transferStore = useTransferStore()
-const { get_user_transactions } = transferStore
-const { transactions } = storeToRefs(transferStore)
+const userStore = useUserStore()
+const { getUserData } = userStore
+const { transactions } = storeToRefs(userStore)
 
 const route = useRoute()
 const router = useRouter()
@@ -27,21 +27,13 @@ const utcTimestamp = ref(null)
 const clientLocalTime = ref(null)
 
 const getTransactionDetail = async () => {
-  await get_user_transactions()
+  await getUserData()
   transactionDetail.value = transactions.value.find((item) => item.transactionId === id.value)
   utcTimestamp.value = transactionDetail.value.timestamp
   userTimeZone.value = Intl.DateTimeFormat().resolvedOptions().timeZone
   clientLocalTime.value = DateTime.fromISO(utcTimestamp.value, { zone: 'utc' })
     .setZone(userTimeZone.value)
     .toLocaleString(DateTime.DATETIME_MED)
-}
-
-const navigateBack = () => {
-  if (window.history.state.back === null) {
-    router.push('/home')
-  } else {
-    router.go(-1)
-  }
 }
 
 onMounted(async () => {
@@ -53,14 +45,14 @@ onMounted(async () => {
 </script>
 
 <template>
-  <v-container class="cont">
-    <header class="d-flex align-center justify-space-between pa-4">
-      <div class="d-flex align-center justify-center ga-2" @click="navigateBack()">
-        <AngleLeftASvg class="angleLeft-svg" />
+  <v-container class="cont pa-0" v-motion-slide-visible-bottom>
+    <header class="d-flex align-center justify-space-between py-6 px-4">
+      <div class="d-flex align-center justify-center ga-2" @click="navigateBack('/home')">
+        <ChevronLeftSvg class="chevronLeft-svg" />
         <span>Transaction Details</span>
       </div>
     </header>
-    <div v-if="transactionDetail" class="details d-flex flex-column ga-4">
+    <div v-if="transactionDetail" class="details d-flex flex-column ga-4 pa-3">
       <v-card class="col-1 d-flex flex-column justify-center align-center pa-6 ga-2" variant="flat">
         <span v-if="transactionDetail.type === 'credit'" class="name"
           >Received From {{ transactionDetail.sender.toUpperCase() }}</span
@@ -139,6 +131,12 @@ onMounted(async () => {
   width: 100%;
   padding: $padding_base;
 
+  header {
+    position: sticky;
+    background-color: #fff;
+    // box-shadow: 0px 0px 15px 0px #a7a5a5;
+  }
+
   .details {
     widows: 100%;
     height: auto;
@@ -189,7 +187,7 @@ onMounted(async () => {
   }
 }
 
-.angleLeft-svg {
+.chevronLeft-svg {
   stroke: #000;
   width: 25px;
   height: 25px;

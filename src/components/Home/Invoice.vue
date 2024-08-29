@@ -79,6 +79,8 @@ defineProps({
     position: absolute;
     top: 1rem;
     left: 1rem;
+    width: 40px;
+    height: 40px;
     stroke: #696767;
     stroke-width: 1.5;
     z-index: 1;

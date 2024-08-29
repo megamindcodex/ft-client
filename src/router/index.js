@@ -39,6 +39,10 @@ const router = createRouter({
           path: 'transfer-to-bitpay',
           component: () => import('../components/Home/TransferToBitpay.vue')
         },
+        {
+          path: "/notifications",
+          component: () => import("../components/Home/Notifications.vue")
+        }
       ]
     },
     {
@@ -49,7 +53,15 @@ const router = createRouter({
     {
       path: '/me',
       name: 'me',
-      component: () => import('../views/MePageView.vue')
+      default: () => import("@/views/MePageView.vue"),
+      component: () => import('../views/MePageView.vue'),
+      children: [
+        {
+          path: "profile",
+          name: 'profile',
+          component: () => import("@/components/Me/ProfilePage.vue")
+        }
+      ]
     },
     {
       path: '/transactions',

@@ -10,7 +10,7 @@ import {
   provide
 } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import AngleLeftASvgVue from '@/components/icons/AngleLeftASvg.vue'
+import ChevronLeftSvg from '@/components/icons/ChevronLeftSvg.vue'
 import AlertMsg from '@/components/AlertMsg.vue'
 import { useAlertStore } from '@/stores/alertStore'
 import { storeToRefs } from 'pinia'
@@ -97,7 +97,7 @@ onMounted(async () => {
   <div class="cont">
     <div class="header">
       <div>
-        <AngleLeftASvgVue @click="router.go(-1)" />
+        <ChevronLeftSvg @click="router.go(-1)" />
         <span> {{ panelName }}</span>
       </div>
 

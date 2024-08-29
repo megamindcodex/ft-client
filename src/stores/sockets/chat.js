@@ -4,21 +4,28 @@ import { io } from 'socket.io-client'
 export const useChatStore = defineStore('chatStore', () => {
   // create a new Manager instance
   const socketEndpoint = import.meta.env.VITE_webSocket_URL
-  let manager
-  let socket
+
+  const manager = new io.Manager(socketEndpoint, {
+    reconnection: true,
+    reconnectionAttempts: 5,
+    reconnectionDelay: 1000
+  })
+  const socket = manager.socket('/chat')
 
   const connect_to_chat_socket = async (userName) => {
-    manager = new io.Manager(socketEndpoint, {
-      reconnection: true,
-      reconnectionAttempts: 5,
-      reconnectionDelay: 1000
-    })
-    socket = manager.socket('/chat')
-    if (socket.active) {
+    // if (socket.active) {
+      socket.emit("join", userName)
       console.log(`${userName} connected to the chat namespace`)
+
       return { success: true }
-    }
+    // }
   }
+
+  socket.on("handshake", (data) => {
+    console.log(`${data.userName}: ${data.socketId}`)
+  })
+
+
 
   return { connect_to_chat_socket }
 })

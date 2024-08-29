@@ -2,40 +2,51 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { useTransferStore } from '@/stores/transferStore'
+import { useUserStore } from '@/stores/userStore'
 import { useNavigatorStore } from '@/stores/navigatorStore'
 import { storeToRefs } from 'pinia'
+
+import ArrowUpSvg from '../icons/ArrowUpSvg.vue'
+import ArrowDownSvg from '../icons/ArrowDownSvg.vue'
 
 const navigateStore = useNavigatorStore()
 const { navigateTo } = navigateStore
 
-const transferStore = useTransferStore()
-const { get_user_transactions } = transferStore
-const { transactions, recentTransactions } = storeToRefs(transferStore)
+const userStore = useUserStore()
+const { recentTransactions } = storeToRefs(userStore)
+
+// const transferStore = useTransferStore()
+// const { get_user_transactions } = transferStore
+// const { transactions, recentTransactions } = storeToRefs(transferStore)
 
 const reversedRecentTransactions = computed(() => {
   return recentTransactions.value.reverse()
 })
 
 onMounted(async () => {
-  await get_user_transactions()
   // console.log(recentTransactions.value)
 })
 </script>
 
 <template>
   <v-card class="recent-trans-section mt-4 d-flex flex-column" variant="flat">
-    <div class="col-1 py-5">
+    <div class="col-1 py-5 pl-2">
       <strong>Recent Transaction</strong>
     </div>
     <div class="transaction-list col-2 d-flex flex-column" v-if="reversedRecentTransactions.length">
       <div
         v-for="item in reversedRecentTransactions.reverse()"
         :key="item.transactionId"
-        class="item px-0 py-3"
+        class="item px-2 py-3"
         v-ripple="{ class: 'text-black' }"
         @click="navigateTo(`/transactions/${item.transactionId}`)"
       >
-        <!-- <div class="row "></div> -->
+        <div class="row row-1">
+          <div :class="['icon-box', item.type]">
+            <ArrowUpSvg v-if="item.type === 'credit'" class="arrowup-svg" />
+            <ArrowDownSvg v-if="item.type === 'debit'" class="arrowdown-svg" />
+          </div>
+        </div>
         <div class="row row-2">
           <span class="subject">{{ item.subject }}</span>
           <span>{{ item.date }}</span>
@@ -62,6 +73,7 @@ onMounted(async () => {
   // background-color: transparent;
   .col-1 {
     border-bottom: 1px solid #a7a5a5;
+    box-shadow: 0px 0px 15px 0px #a7a5a5;
   }
 
   // trans-list
@@ -77,18 +89,47 @@ onMounted(async () => {
     .item {
       width: 100%;
       display: flex;
+      gap: 0.7rem;
       align-items: center;
-      justify-content: center;
       border-bottom: 1px solid #8c8989;
       .row {
-        display: flex;
         width: 100%;
-        // border: 1px solid orangered;
 
         span {
           overflow: hidden;
           white-space: nowrap;
           font-size: $font_base + 4;
+        }
+      }
+
+      .row-1 {
+        width: fit-content;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .icon-box {
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          // border: 1px solid red;
+
+          .arrowup-svg .arrowdown-svg {
+            width: 30px;
+            height: 30px;
+            stroke-width: 1.5;
+          }
+        }
+        .credit {
+          stroke: green;
+          background-color: rgba(0, 128, 81, 0.199);
+        }
+        .debit {
+          stroke: red;
+          background-color: rgba(255, 42, 0, 0.23);
         }
       }
 

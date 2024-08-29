@@ -6,7 +6,7 @@ export const useNewsStore = defineStore('newsStore', () => {
   let manager
   let socket
 
-  const connect_to_news_socket = (userName) => {
+  const connect_to_news_socket = async (userName) => {
     manager = new io.Manager(socketEndpoint, {
       reconnection: true,
       reconnectionAttempts: 5,
@@ -15,11 +15,14 @@ export const useNewsStore = defineStore('newsStore', () => {
 
     socket = manager.socket('/news')
     if (socket.active) {
+      socket.emit("join", userName)
       console.log(`${userName} connected to the news namespace`)
       return { success: true }
     }
     // console.log(`${userName} Connected to the news namespace`)
   }
+
+
 
   return { connect_to_news_socket }
 })

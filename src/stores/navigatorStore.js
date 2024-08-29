@@ -9,5 +9,14 @@ export const useNavigatorStore = defineStore('navigatorStore', () => {
     router.push(path)
   }
 
-  return { navigateTo }
+  const navigateBack = (path) => {
+    if (window.history.state.back === null) {
+      router.push(path)
+    } else {
+      router.go(-1)
+    }
+  }
+
+  
+  return { navigateTo, navigateBack }
 })

@@ -1,0 +1,245 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+.light-theme {
+  background-color: #ededed;
+  color: #000;
+  transition: 0.6s ease-in;
+}
+
+.dark-theme {
+  background-color: #1f1f1f;
+  color: #e0e0e0;
+  transition: 0.6s ease-in;
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 15px;
+}
+.form .form-group {
+  position: relative;
+  width: 100%;
+}
+.form .form-group .input-field {
+  position: relative;
+  width: 100%;
+  display: flex;
+  row-gap: 5px;
+  flex-direction: column;
+}
+.form .form-group .input-field label {
+  top: 25%;
+  left: 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+.form .form-group .input-field label:after {
+  content: "*";
+  font-size: 1rem;
+  font-weight: 600;
+}
+.form .form-group .input-field input {
+  font-size: 20px;
+  padding: 10px;
+  padding-left: 35px;
+  border-radius: 10px;
+  outline: none;
+  border: 2px solid #8c8989;
+}
+.form .form-group .input-field input:focus {
+  border: 2px solid #79b4e7;
+  box-shadow: 0px 0px 8px #1574c7;
+  outline: none;
+}
+.form .form-group .input-field input::-moz-placeholder {
+  color: #5b5a5a;
+  font-size: 15px;
+}
+.form .form-group .input-field input::placeholder {
+  color: #5b5a5a;
+  font-size: 15px;
+}
+.form .form-group .input-field input:disabled {
+  background-color: #8c8989;
+}
+.form .form-group .input-details {
+  width: 100%;
+  height: 20px;
+  padding-left: 10px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+.form .form-group .input-details span {
+  color: rgb(226, 56, 56);
+}
+.form .checkbox-field {
+  margin-bottom: 1.5rem;
+  padding: 10px;
+}
+.form .checkbox-field .input-field {
+  width: 100%;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: start;
+  align-items: center;
+  gap: 0.7rem;
+}
+.form .checkbox-field .input-field .agree-span {
+  width: -moz-fit-content;
+  width: fit-content;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+.form .checkbox-field .input-field .check-label {
+  width: 25px;
+  height: 25px;
+  border: 2px solid #000;
+}
+.form .checkbox-field .input-field .check-label:after {
+  display: none;
+}
+.form .checkbox-field .input-field input {
+  display: none;
+}
+.form .checkbox-field .input-field input:checked ~ .check-label {
+  background-color: #1677fe;
+  border: 2px solid #1677fe;
+}
+.form .checkbox-field .input-field input:checked ~ .agree-span {
+  color: #1677fe;
+}
+.form .checkbox-field .input-details {
+  position: relative;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+.form .checkbox-field .input-details span {
+  position: absolute;
+  top: 0;
+  color: rgb(226, 56, 56);
+  font-size: 16px;
+}
+.form #code-field .input-field {
+  position: relative;
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  flex-direction: row;
+}
+.form #code-field .input-field .row1 {
+  position: relative;
+  width: 60%;
+}
+.form #code-field .input-field .row1 input {
+  position: relative;
+  width: 100%;
+}
+.form #code-field .input-field .row2 {
+  width: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.form #code-field .input-field .row2 button {
+  position: relative;
+  align-self: end;
+  font-size: 20px;
+  font-weight: 400;
+  color: #fdfdfd;
+  background-color: #000;
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+}
+.form #code-field .input-field .row2 button:disabled {
+  background-color: #8c8989;
+  color: #000;
+}
+.form #code-field .code-input-details {
+  width: 100%;
+  height: 20px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding-left: 10px;
+}
+.form #code-field .code-input-details span {
+  color: rgb(226, 56, 56);
+}
+.form .btn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.form .btn button {
+  width: 100%;
+  color: #fdfdfd;
+  font-size: 22.5px;
+  font-weight: 400;
+  letter-spacing: 1.2px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #000;
+}
+.form .btn button:hover {
+  background-color: #1b1a1a;
+}
+.form .base {
+  font-size: 20px;
+  display: flex;
+  gap: 5px;
+  margin: auto;
+  margin: 1.5rem auto 1.5rem auto;
+}
+.form .forgot-pass {
+  width: 100%;
+  display: flex;
+  justify-content: start;
+  margin-bottom: 10px;
+}
+.form .forgot-pass a {
+  font-size: 18px;
+}
+
+.info {
+  position: relative;
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+}
+.info .error-msg {
+  position: absolute;
+  color: red;
+  left: 5px;
+}
+.info .info-msg {
+  position: absolute;
+  color: green;
+  right: 5px;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  cursor: pointer;
+  color: #1677fe;
+  text-decoration: none;
+}
+
+#main {
+  width: 100%;
+}/*# sourceMappingURL=main.css.map */

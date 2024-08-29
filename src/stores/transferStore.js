@@ -4,19 +4,16 @@ import apiClient from '../api/apiConfig'
 import { useRouter } from 'vue-router'
 
 export const useTransferStore = defineStore('transferStore', () => {
+
+
+
   const transactions = ref([])
   const router = useRouter()
 
-  const recentTransactions = computed(() => {
-    if (transactions.value.length < 1) {
-      return []
-    }
-    return transactions.value.slice(0, 15)
-  })
 
   const transfer_funds = async (formData, invoice) => {
     try {
-      const {recipient, account, amount} = invoice
+      const { recipient, account, amount } = invoice
 
       const res = await apiClient.post('/api/transfer_funds', formData)
 
@@ -24,9 +21,9 @@ export const useTransferStore = defineStore('transferStore', () => {
         return { success: false, error: res.error }
       }
 
-      
+
       // router.push({name: "success-transfer"})
-      router.push({name: "success-transfer", params: {recipient: recipient, account: account, amount: amount}})
+      router.push({ name: "success-transfer", params: { recipient: recipient, account: account, amount: amount } })
       return { success: true, data: res.data }
     } catch (err) {
       console.error('Failed to transfer funds', err, err.response.data.error)
@@ -34,29 +31,32 @@ export const useTransferStore = defineStore('transferStore', () => {
     }
   }
 
-  const get_user_transactions = async () => {
-    try {
-      const res = await apiClient.get('/api/get_user_transactions')
+  // const get_user_transactions = async () => {
+  //   try {
 
-      if (res.status !== 200) {
-        return { success: false, error: res.error }
-      }
+  //     const userStore = useUserStore()
+  //     const { getUserData } = userStore
 
+  //     // const res = await apiClient.get('/api/get_user_transactions')
+  //     // if (res.status !== 200) {
+  //     //   return { success: false, error: res.error }
+  //     // }
+  //     const res = await getUserData()
 
-      transactions.value = res.data
-      // console.log(res)
+  //     if (!res.success) {
+  //       return { success: false, error: res.error }
+  //     }
+  //     userData.value = res.data
+  //     return { success: true, data: res.data }
+  //   } catch (err) {
+  //     console.error('error getting user transactions', err)
+  //     return { success: false, error: err.response.data.error }
+  //   }
+  // }
 
-      return { success: true, data: res.data }
-    } catch (err) {
-      console.error('error getting user transactions', err)
-      return { success: false, error: err.response.data.error }
-    }
-  }
 
   return {
     transactions,
-    recentTransactions,
     transfer_funds,
-    get_user_transactions
   }
 })

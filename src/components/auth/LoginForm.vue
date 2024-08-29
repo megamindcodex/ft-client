@@ -15,11 +15,12 @@ import MailSvg from '../icons/MailSvg.vue'
 
 // distructure all validation function
 const { validate_email, validate_password } = useValidator()
-const { loginUser } = useUserStore()
+const { loginUser, mutate_userData } = useUserStore()
 
 const router = useRouter()
 const visible = ref(false)
 const isLoading = ref(false)
+const isDisabled = ref(false)
 
 //***********************************************//
 const emit = defineEmits(['toggleAlert'])
@@ -72,18 +73,21 @@ const submitForm = async () => {
   await toggleAlert('', '', false)
   console.log('form is valid')
   isLoading.value = true
+  isDisabled.value = true
   const res = await loginUser(formData)
 
   if (!res.success) {
     isLoading.value = false
+    isDisabled.value = false
     await toggleAlert('error', res.error, true)
     return
   }
-  await toggleAlert('success', res.data, true)
+
+  await toggleAlert('success', res.message, true)
   console.log(res.data)
   setTimeout(() => {
     router.push('/home')
-  }, 5000)
+  }, 3000)
 }
 </script>
 
@@ -137,7 +141,7 @@ const submitForm = async () => {
       <RouterLink to="/auth/reset">Forgot password?</RouterLink>
     </div>
     <div class="btn">
-      <button type="submit">
+      <button type="submit" :disabled="isDisabled">
         <v-progress-circular
           v-if="isLoading"
           :size="30"

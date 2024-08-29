@@ -13,22 +13,32 @@ defineProps({
 </script>
 
 <template>
-  <header class="d-flex align-center justify-space-between mt-2">
-    <div class="row d-flex align-center ga-2">
+  <header class="d-flex align-center justify-space-between py-5 px-3">
+    <div
+      class="row d-flex align-center ga-2"
+      v-ripple="{ class: 'text-black' }"
+      @click="navigateTo('/me/profile')"
+    >
       <div class="dp bg-teal-darken-4"></div>
       <span class="font-weight-medium">Hi, {{ userName }}</span>
     </div>
 
     <div class="row d-flex ga-5 align-center">
       <HeadsetSvg @click="navigateTo('#')" />
-      <BellSvg @click="navigateTo('#')" />
+      <BellSvg @click="navigateTo('/notifications')" />
     </div>
   </header>
 </template>
 
 <style lang="scss" scoped>
 header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 1;
   width: 100%;
+  background-color: #fff;
+  box-shadow: 0px 0px 15px 0px #a7a5a5;
   //border: 1px solid green;
 }
 

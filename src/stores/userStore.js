@@ -4,6 +4,7 @@ import apiClient from '../api/apiConfig'
 
 import { useChatStore } from '@/stores/sockets/chat'
 import { useNewsStore } from '@/stores/sockets/news'
+import { useNotificationStore } from './sockets/notification'
 import { useRouter } from 'vue-router'
 
 export const useUserStore = defineStore('userStore', () => {
@@ -12,16 +13,20 @@ export const useUserStore = defineStore('userStore', () => {
   const isUserNameLoaing = ref(false)
   const router = useRouter()
 
-  const finances = computed(() => {
-    if (userData.value === null || userData.value === undefined || userData.value == {}) {
-      return null
-    } else {
-      return userData.value.finances
-    }
-  })
+  const finances = ref({})
+  const transactions = ref([])
+  const notifications = ref([])
 
-  const { connect_to_chat_socket } = useChatStore()
-  const { connect_to_news_socket } = useNewsStore()
+  const recentTransactions = computed(() => {
+    if (transactions.value.length < 1) {
+      return []
+    }
+    return transactions.value.slice(0, 15)
+  })
+  // const { connect_to_chat_socket } = useChatStore()
+  // const { connect_to_news_socket } = useNewsStore()
+
+
 
   // ******************Register user code functions****************//
   const registerUser = async (formData) => {
@@ -42,6 +47,7 @@ export const useUserStore = defineStore('userStore', () => {
   }
   // ************************************************************* //
 
+
   // ********************Login user code function****************//
   const loginUser = async (formData) => {
     try {
@@ -52,7 +58,8 @@ export const useUserStore = defineStore('userStore', () => {
         return { success: false, error: res.error }
       }
       console.log(res)
-      return { success: true, data: res.data.message }
+      await mutate_userData(res.data.userData)
+      return { success: true, data: res.data.userData, message: res.data.message }
     } catch (err) {
       console.error('error logging in', err)
       return { success: false, error: err.response.data.error }
@@ -96,8 +103,12 @@ export const useUserStore = defineStore('userStore', () => {
   // *************connect to websocket code function
   const connect_to_websockets = async (userName) => {
     try {
-      await connect_to_chat_socket(userName)
-      connect_to_news_socket(userName)
+      // await connect_to_chat_socket(userName)
+      // await connect_to_news_socket(userName)
+      const notificationStore = useNotificationStore()
+      const { connect_to_notification_socket } = notificationStore
+      await connect_to_notification_socket(userName)
+
     } catch (err) {
       console.error('error connecting to all or one websocket', err)
     }
@@ -115,6 +126,10 @@ export const useUserStore = defineStore('userStore', () => {
         throw new Error('oops...Something is wrong')
       }
       userData.value = res.data
+      finances.value = userData.value.finances
+      transactions.value = userData.value.transactions.messages.reverse()
+      notifications.value = userData.value.notification.messages.reverse()
+      // console.log(userData.value)
       return { success: true, data: res.data }
     } catch (err) {
       console.error('error getting user Data', err)
@@ -122,6 +137,25 @@ export const useUserStore = defineStore('userStore', () => {
     }
   }
   // ******************************************************** //
+
+
+  // **************Mutate userData************//
+
+  const mutate_userData = async (data) => {
+    try {
+      console.log("userData mutation")
+      userData.value = data
+      finances.value = userData.value.finances
+      transactions.value = userData.value.transactions.messages.reverse()
+      notifications.value = userData.value.notifications.messages.reverse()
+      console.log("tried mutating userDATA: ", userData.value)
+    } catch (err) {
+      console.error("Error mutating user data", err)
+    }
+  }
+
+  // *************************************************** //
+
 
   // **************validate Receiver Account Number************//
   const get_receiver_userName = async (accountNumber) => {
@@ -149,9 +183,13 @@ export const useUserStore = defineStore('userStore', () => {
     finances,
     isLoading,
     isUserNameLoaing,
+    transactions,
+    notifications,
+    recentTransactions,
     registerUser,
     loginUser,
     getUserData,
+    mutate_userData,
     connect_to_websockets,
     send_reset_code,
     reset_password,

@@ -6,7 +6,7 @@ import { useNavigatorStore } from '@/stores/navigatorStore'
 import { useTransferStore } from '@/stores/transferStore'
 import { computed, reactive, ref } from 'vue'
 import InvoicePanel from './Invoice.vue'
-import AngleLeftASvg from '../icons/AngleLeftASvg.vue'
+import ChevronLeftSvg from '../icons/ChevronLeftSvg.vue'
 
 const navigateStore = useNavigatorStore()
 const { navigateTo, isUserNameLoading } = navigateStore
@@ -91,89 +91,97 @@ const submitForm = async () => {
 }
 </script> 
 <template>
-  <v-container class="cont pa-3 mt-2 bg-grey-lighten-2">
+  <v-container class="cont pa-0 bg-grey-lighten-2">
     <!-- ********* Header section ************ -->
-    <header class="d-flex align-center justify-space-between">
-      <div class="row-1 d-flex align-center justify-center" @click="navigateTo('/home')">
-        <AngleLeftASvg class="angleLeft-svg" />
+    <header class="d-flex align-center justify-space-between py-6 px-2">
+      <div
+        class="row-1 d-flex align-center justify-center"
+        v-ripple="{ class: 'text-black' }"
+        @click="navigateTo('/home')"
+      >
+        <ChevronLeftSvg class="chevronLeft-svg" />
         <span>Transfer to Bitpay Account</span>
       </div>
       <div class="row-2" @click="'#'"><span>History</span></div>
     </header>
 
     <!-- ************ Recepient Account Number and Amount Section -->
-    <v-card class="form-cont pa-4 mt-10" variant="flat">
-      <v-form
-        @submit.prevent="submitForm"
-        class="trans-form d-flex flex-column justify-center align-center ga-2"
-      >
-        <div class="col-1 form-group ga-2">
-          <div class="input-field">
-            <label for="account-number" class="account-label py-4">Recipient Account</label>
-            <input
-              type="text"
-              id="account-number"
-              placeholder="Enter 7-digit Account Number"
-              v-model="formData.accountNumber"
-              @input="validateFiled('account-number')"
-            />
+    <v-container class="">
+      <v-card class="form-cont pa-4 mt-5" variant="flat">
+        <v-form
+          @submit.prevent="submitForm"
+          class="trans-form d-flex flex-column justify-center align-center ga-2"
+        >
+          <div class="col-1 form-group ga-2">
+            <div class="input-field">
+              <label for="account-number" class="account-label py-4">Recipient Account</label>
+              <input
+                type="text"
+                id="account-number"
+                placeholder="Enter 7-digit Account Number"
+                v-model="formData.accountNumber"
+                @input="validateFiled('account-number')"
+              />
+            </div>
+            <div class="input-details">
+              <v-progress-circular
+                v-if="isUserNameLoading"
+                :size="30"
+                color="primary"
+                indeterminate
+              ></v-progress-circular>
+              <span v-if="accountNumberValidation.error" class="error-msg">{{
+                accountNumberValidation.message
+              }}</span>
+              <span class="info-msg" v-else>{{
+                accountNumberValidation.message.toUpperCase()
+              }}</span>
+            </div>
           </div>
-          <div class="input-details">
-            <v-progress-circular
-              v-if="isUserNameLoading"
-              :size="30"
-              color="primary"
-              indeterminate
-            ></v-progress-circular>
-            <span v-if="accountNumberValidation.error" class="error-msg">{{
-              accountNumberValidation.message
-            }}</span>
-            <span class="info-msg" v-else>{{ accountNumberValidation.message.toUpperCase() }}</span>
+
+          <div class="divider mt-3"></div>
+
+          <div class="col-2 form-group ga-2">
+            <div class="input-field">
+              <label for="amount" class="amount-label py-4">Amount</label>
+              <input
+                type="text"
+                id="amount"
+                placeholder="Ente Amount "
+                v-model="formData.amount"
+                class="pl-6"
+                @input="validateFiled('amount')"
+              />
+            </div>
+            <div class="input-details">
+              <span v-if="amountValidation.error" class="error-msg">{{
+                amountValidation.message
+              }}</span>
+            </div>
           </div>
-        </div>
 
-        <div class="divider mt-3"></div>
+          <div class="divider mt-2"></div>
 
-        <div class="col-2 form-group ga-2">
-          <div class="input-field">
-            <label for="amount" class="amount-label py-4">Amount</label>
-            <input
-              type="text"
-              id="amount"
-              placeholder="Ente Amount "
-              v-model="formData.amount"
-              class="pl-6"
-              @input="validateFiled('amount')"
-            />
+          <div class="col-3 form-group">
+            <div class="input-field">
+              <label for="remark" class="remark-label py-1">Remark</label>
+              <input
+                type="text"
+                id="remark"
+                placeholder="What's this for?(optional)"
+                v-model="formData.description"
+              />
+            </div>
           </div>
-          <div class="input-details">
-            <span v-if="amountValidation.error" class="error-msg">{{
-              amountValidation.message
-            }}</span>
+
+          <div class="confirm-btn mt-4">
+            <button type="submit" v-ripple="{ class: 'text-black' }" :disabled="!isDisabled">
+              Confirm
+            </button>
           </div>
-        </div>
-
-        <div class="divider mt-2"></div>
-
-        <div class="col-3 form-group">
-          <div class="input-field">
-            <label for="remark" class="remark-label py-1">Remark</label>
-            <input
-              type="text"
-              id="remark"
-              placeholder="What's this for?(optional)"
-              v-model="formData.description"
-            />
-          </div>
-        </div>
-
-        <div class="confirm-btn mt-4">
-          <button type="submit" v-ripple="{ class: 'text-black' }" :disabled="!isDisabled">
-            Confirm
-          </button>
-        </div>
-      </v-form>
-    </v-card>
+        </v-form>
+      </v-card>
+    </v-container>
 
     <!--************ Confirm payment/Invoice Dialog **************-->
     <v-dialog
@@ -206,6 +214,7 @@ const submitForm = async () => {
   height: 100dvh;
 
   header {
+    background-color: #fff;
     .row-1 {
       span {
         font-size: $font_base + 4;
@@ -352,7 +361,7 @@ const submitForm = async () => {
   }
 }
 
-.angleLeft-svg {
+.chevronLeft-svg {
   stroke: #000;
   width: 25px;
   height: 25px;

@@ -21,7 +21,7 @@ const recipient = ref(route.params.recipient)
 const account = ref(route.params.account)
 const amount = ref(route.params.amount)
 
-console.log(route)
+// console.log(route)
 onMounted(() => {
   getUserData()
 })

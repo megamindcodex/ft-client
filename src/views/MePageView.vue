@@ -2,9 +2,7 @@
 <script setup>
 </script>
 <template>
-  <div>
-    <h1>Me Page</h1>
-  </div>
+  <RouterView v-motion-slide-visible-bottom />
 </template>
 
 <style lang="scss" scoped>

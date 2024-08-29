@@ -2,29 +2,31 @@
 
 <script setup>
 import { useNavigatorStore } from '@/stores/navigatorStore'
-import { useTransferStore } from '@/stores/transferStore'
+import { useUserStore } from '@/stores/userStore'
 import { storeToRefs } from 'pinia'
-import { onMounted } from 'vue'
-import AngleLeftASvg from '../icons/AngleLeftASvg.vue'
+import { computed, onMounted } from 'vue'
+import ChevronLeftSvg from '../icons/ChevronLeftSvg.vue'
+import ArrowUpSvg from '../icons/ArrowUpSvg.vue'
+import ArrowDownSvg from '../icons/ArrowDownSvg.vue'
 
 const navigateStore = useNavigatorStore()
 const { navigateTo } = navigateStore
 
-const transferStore = useTransferStore()
-const { get_user_transactions } = transferStore
-const { transactions } = storeToRefs(transferStore)
+const userStore = useUserStore()
+const { getUserData } = userStore
+const { userData, transactions } = storeToRefs(userStore)
 
-onMounted(() => {
-  get_user_transactions()
-  console.log(transactions.value)
+onMounted(async () => {
+  // await getUserData()
+  // console.log(userData.value)
 })
 </script>
 
 <template>
-  <v-container class="cont d-flex justify-center">
-    <header class="d-flex align-center justify-space-between pa-2 py-4">
+  <v-container class="cont d-flex justify-center pa-0 pb-10" v-motion-slide-visible-bottom>
+    <header class="lign-center d-flex justify-space-between py-6 px-4">
       <div class="row-1 d-flex align-center justify-center ga-2" @click="navigateTo('/home')">
-        <AngleLeftASvg class="angleLeft-svg" />
+        <ChevronLeftSvg class="chevronLeft-svg" />
         <span>Transactions</span>
       </div>
     </header>
@@ -37,14 +39,19 @@ onMounted(() => {
       <div
         v-for="item in transactions"
         :key="item.transactionId"
-        class="item px-0 py-3"
+        class="item px-2 py-3"
         v-ripple="{ class: 'text-black' }"
         @click="navigateTo(`/transactions/${item.transactionId}`)"
       >
-        <!-- <div class="row "></div> -->
+        <div class="row row-1">
+          <div :class="['icon-box', item.type]">
+            <ArrowUpSvg v-if="item.type === 'credit'" class="arrowup-svg" />
+            <ArrowDownSvg v-if="item.type === 'debit'" class="arrowdown-svg" />
+          </div>
+        </div>
         <div class="row row-2">
           <span class="subject">{{ item.subject }}</span>
-          <span>{{ item.date }}</span>
+          <span>{{ item.timestamp }}</span>
         </div>
         <div class="row row-3">
           <span class="amount">${{ item.amount }}</span>
@@ -68,31 +75,62 @@ onMounted(() => {
   padding: $padding_base - 2;
 
   header {
-    // border: 1px solid green;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #fff;
     border-bottom: 1px solid #8c8989;
+    box-shadow: 0px 0px 15px 0px #a7a5a5;
   }
 
   .transaction-list {
     width: 100%;
-    // border: 1px solid blue;
     border-radius: 0px;
     background-color: transparent;
 
     .item {
       width: 100%;
       display: flex;
+      gap: 0.7rem;
       align-items: center;
-      justify-content: center;
       border-bottom: 1px solid #8c8989;
       .row {
-        display: flex;
         width: 100%;
-        // border: 1px solid orangered;
-
         span {
           overflow: hidden;
           white-space: nowrap;
           font-size: $font_base + 4;
+        }
+      }
+
+      .row-1 {
+        width: fit-content;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .icon-box {
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          // border: 1px solid red;
+
+          .arrowup-svg .arrowdown-svg {
+            width: 30px;
+            height: 30px;
+            stroke-width: 1.5;
+          }
+        }
+        .credit {
+          stroke: green;
+          background-color: rgba(0, 128, 81, 0.199);
+        }
+        .debit {
+          stroke: red;
+          background-color: rgba(255, 42, 0, 0.23);
         }
       }
 
@@ -113,6 +151,7 @@ onMounted(() => {
       .row-3 {
         display: flex;
         flex-direction: column;
+        align-self: end;
         gap: 5px;
         justify-content: center;
         align-items: end;
@@ -147,7 +186,7 @@ onMounted(() => {
   }
 }
 
-.angleLeft-svg {
+.chevronLeft-svg {
   stroke: #000;
   width: 25px;
   height: 25px;

@@ -26,6 +26,7 @@ const { registerUser } = useUserStore()
 const router = useRouter()
 const visible = ref(false)
 const isLoading = ref(false)
+const isDisabled = ref(false)
 const ischecked = ref(false)
 const agreeTermsErrorTxt = ref('')
 
@@ -111,10 +112,12 @@ const submitForm = async () => {
   await toggleAlert('', '', false)
   console.log('form is valid')
   isLoading.value = true
+  isDisabled.value = true
   const res = await registerUser(formData)
 
   if (!res.success) {
     isLoading.value = false
+    isDisabled.value = false
     await toggleAlert('error', res.error, true)
     return
   }
@@ -252,7 +255,7 @@ watch(ischecked, () => {
       </div>
     </div>
     <div class="btn">
-      <button type="submit">
+      <button type="submit" :disabled="isDisabled">
         <v-progress-circular
           v-if="isLoading"
           :size="30"

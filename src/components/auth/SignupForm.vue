@@ -122,11 +122,10 @@ const submitForm = async () => {
     return
   }
 
-  await toggleAlert('success', res.data, true)
-  console.log(res.data.message)
+  await toggleAlert('success', res.message, true)
   setTimeout(() => {
-    router.push('/login')
-  }, 5000)
+    router.push('/home')
+  }, 3000)
 }
 
 watch(ischecked, () => {
@@ -231,8 +230,8 @@ watch(ischecked, () => {
           @blur="validateFiled('password')"
         />
         <LockSvg />
-        <EyeSvg v-if="visible" @click="visible = !visible" />
-        <EyeOfSvg v-if="!visible" @click="visible = !visible" />
+        <EyeSvg v-if="visible" @click="visible = !visible" class="eye-svg" />
+        <EyeOfSvg v-if="!visible" @click="visible = !visible" class="eye-svg" />
       </div>
       <div class="input-details">
         <Transition name="input-error-fade">
@@ -277,6 +276,11 @@ watch(ischecked, () => {
 .alert {
   top: 0;
   z-index: 999;
+}
+.eye-svg {
+  position: absolute;
+  top: 2.7rem;
+  right: 0.7rem;
 }
 .input-error-fade-enter-from {
   opacity: 0;

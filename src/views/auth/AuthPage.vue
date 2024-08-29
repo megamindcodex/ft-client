@@ -43,7 +43,7 @@ const ResetForm = defineAsyncComponent({
 const alertDataProps = ref(null)
 watch(displayAlert, () => {
   alertDataProps.value = alertData.value
-  console.log(alertDataProps.value)
+  // console.log(alertDataProps.value)
 })
 
 provide('displayAlert', displayAlert)
@@ -88,18 +88,18 @@ watch(route, () => {
 onMounted(async () => {
   currentParams.value = route.params.panel
   switchPanel()
-  console.log(route.name)
+  // console.log(route.name)
   // toggleAlert('success', 'test', true)
 })
 </script>
 
 <template>
   <div class="cont">
-    <div class="header">
-      <div>
-        <ChevronLeftSvg @click="router.go(-1)" />
+    <div class="header-cont">
+      <header>
+        <ChevronLeftSvg @click="router.go(-1)" class="chevronLeft-svg" />
         <span> {{ panelName }}</span>
-      </div>
+      </header>
 
       <Teleport to="#alert">
         <AlertMsg v-if="displayAlert" :data="alertDataProps" v-motion-slide-top />
@@ -132,16 +132,16 @@ onMounted(async () => {
   // border: 1px solid red;
 }
 
-.header {
+.header-cont {
   width: 100%;
   display: flex;
   flex-direction: column;
 
-  div {
+  header {
     display: flex;
     width: 100%;
     align-items: center;
-    gap: 1rem;
+    gap: 0.7rem;
     span {
       font-size: 1.2rem;
       margin: 0;
@@ -179,5 +179,12 @@ onMounted(async () => {
 
 .input-error-fade-leave-active {
   transition: 0.1s ease-in;
+}
+
+.chevronLeft-svg {
+  stroke: #000;
+  width: 25px;
+  height: 25px;
+  stroke-width: 1.7;
 }
 </style>

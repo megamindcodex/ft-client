@@ -89,6 +89,7 @@ const router = createRouter({
 // Define the beforeEach method
 router.beforeEach(async (to, from, next) => {
   const accessToken = await getCookies(cookieName)
+  // console.log(`accessToken: ${accessToken}`)
   const checkForCookie = () => {
     if (!accessToken) {
       return false
@@ -104,6 +105,7 @@ router.beforeEach(async (to, from, next) => {
 
   if (to.name !== 'auth') {
     if (!isAuthenticated) {
+      // console.log(`is authenticated: ${isAuthenticated}`)
       next('/auth/login')
     } else {
       next()

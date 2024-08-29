@@ -41,7 +41,7 @@ export const useUserStore = defineStore('userStore', () => {
       }
       console.log(res)
       await mutate_userData(res.data.userData)
-      return { success: true, data: res.data.message }
+      return { success: true, message: res.data.message }
     } catch (err) {
       console.error('error signing in', err.response.data.error)
       return { success: false, error: err.response.data.error }
@@ -59,7 +59,7 @@ export const useUserStore = defineStore('userStore', () => {
       if (res.status !== 200) {
         return { success: false, error: res.error }
       }
-      console.log(res)
+      // console.log(res)
       await mutate_userData(res.data.userData)
       return { success: true, data: res.data.userData, message: res.data.message }
     } catch (err) {

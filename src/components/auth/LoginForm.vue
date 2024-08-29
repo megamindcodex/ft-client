@@ -1,28 +1,23 @@
-
-
 <script setup>
 import { reactive, ref, defineEmits } from 'vue'
 import { useUserStore } from '../../stores/userStore'
-import { useValidator } from '@/composables/useValidator' //custom form validator composables
-import { useRouter } from 'vue-router'
+import { useValidator } from '@/composables/useValidator'
+import { useRoute, useRouter } from 'vue-router'
 
 import EyeSvg from '../icons/EyeSvg.vue'
 import EyeOfSvg from '../icons/EyeOfSvg.vue'
 import LockSvg from '../icons/LockSvg.vue'
 import MailSvg from '../icons/MailSvg.vue'
 
-// const displayAlert = inject('displayAlert')
-
-// distructure all validation function
 const { validate_email, validate_password } = useValidator()
 const { loginUser, mutate_userData } = useUserStore()
 
 const router = useRouter()
+const route = useRoute()
 const visible = ref(false)
 const isLoading = ref(false)
 const isDisabled = ref(false)
 
-//***********************************************//
 const emit = defineEmits(['toggleAlert'])
 
 const toggleAlert = async (type, message, state) => {
@@ -32,13 +27,10 @@ const toggleAlert = async (type, message, state) => {
     console.error(err.message, err)
   }
 }
-//***********************************************//
 
-// All fields validation result
 const emailValidation = ref({ valid: true, error: false, message: '' })
 const passwordValidation = ref({ valid: true, error: false, message: '' })
 
-// validate filed function
 const validateFiled = async (filed) => {
   if (filed === 'email') {
     emailValidation.value = validate_email(formData.email)
@@ -53,43 +45,49 @@ const formData = reactive({
   password: ''
 })
 
-// validate all filed simultaneously
 const validateForm = () => {
   validateFiled('email')
   validateFiled('password')
 
-  // Check if all validations are valid
   return emailValidation.value.valid && passwordValidation.value.valid
 }
 
-// submit form
 const submitForm = async () => {
-  const isFormValid = validateForm()
-  if (!isFormValid) {
-    await toggleAlert('error', 'form is not valid!', true)
-    return console.error('form is not valid!')
-  }
+  try {
+    const isFormValid = validateForm()
+    if (!isFormValid) {
+      await toggleAlert('error', 'form is not valid!', true)
+      return console.error('form is not valid!')
+    }
 
-  await toggleAlert('', '', false)
-  console.log('form is valid')
-  isLoading.value = true
-  isDisabled.value = true
-  const res = await loginUser(formData)
+    await toggleAlert('', '', false)
+    console.log('form is valid')
+    isLoading.value = true
+    isDisabled.value = true
+    const res = await loginUser(formData)
 
-  if (!res.success) {
+    if (!res.success) {
+      isLoading.value = false
+      isDisabled.value = false
+      await toggleAlert('error', res.error, true)
+      return
+    }
+
+    await toggleAlert('success', res.message, true)
+    // console.log(res.data)
+
+    setTimeout(() => {
+      router.push('/home')
+    }, 3000)
+  } catch (err) {
+    console.log(err.message, err)
     isLoading.value = false
     isDisabled.value = false
-    await toggleAlert('error', res.error, true)
-    return
+    await toggleAlert('error', 'An error occurred during login', true)
   }
-
-  await toggleAlert('success', res.message, true)
-  console.log(res.data)
-  // setTimeout(() => {
-  router.push('/home')
-  // }, 3000)
 }
 </script>
+
 
 <template>
   <!-- <button @click="toggleAlert('info', 'you got a message')" class="v-btn bg-purple-accent-4 pa-2">

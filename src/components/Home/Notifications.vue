@@ -4,7 +4,6 @@ import { useUserStore } from '@/stores/userStore'
 import ChevronLeftSvg from '../icons/ChevronLeftSvg.vue'
 import ChevronRightSvg from '../icons/ChevronRightSvg.vue'
 import { storeToRefs } from 'pinia'
-import { data } from 'vue2-dropzone'
 
 const navigateStore = useNavigatorStore()
 const { navigateTo } = navigateStore

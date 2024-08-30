@@ -5,7 +5,6 @@ import { computed, onMounted, ref, watch, watchEffect } from 'vue'
 import { useAlertStore } from '@/stores/alertStore'
 import { useNotificationStore } from './stores/sockets/notification'
 import { useUserStore } from '@/stores/userStore'
-import { useCookies } from '@/composables/useCookies'
 import { cookieName } from '@/constant/cookieName'
 import axios from 'axios'
 
@@ -14,8 +13,6 @@ import NavBar from '@/components/NavBar.vue'
 import NotifyMsg from './components/NotifyMsg.vue'
 // import AlertMsg from '@/components/AlertMsg.vue'
 import { useRoute, useRouter } from 'vue-router'
-
-const { getCookies } = useCookies()
 
 const alertStore = useAlertStore()
 const { toggleAlert } = alertStore
@@ -39,8 +36,7 @@ const isLoading = ref(false)
 
 const load_user_data = async () => {
   isLoading.value = true
-  const accessToken = await getCookies(cookieName)
-  const res = await getUserData(accessToken)
+  const res = await getUserData()
 
   if (res.success === false) {
     isLoading.value = false

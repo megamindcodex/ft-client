@@ -10,7 +10,7 @@ import TransactionDetail from '@/components/Transaction/TransactionDetail.vue'
 
 import AuthPage from '@/views/auth/AuthPage.vue'
 
-const { getCookies } = useCookies()
+const { getCookie } = useCookies()
 
 // import HomeView from '@/views/HomeView.vue'
 const router = createRouter({
@@ -88,7 +88,7 @@ const router = createRouter({
 
 // Define the beforeEach method
 router.beforeEach(async (to, from, next) => {
-  const accessToken = await getCookies(cookieName)
+  const accessToken = await getCookie(cookieName)
   // console.log(`accessToken: ${accessToken}`)
   const checkForCookie = () => {
     if (!accessToken) {

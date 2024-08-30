@@ -7,8 +7,14 @@ import { useNewsStore } from '@/stores/sockets/news'
 import { useNotificationStore } from './sockets/notification'
 import { useRouter } from 'vue-router'
 import { errorMessages } from 'vue/compiler-sfc'
+import { useCookies } from '@/composables/useCookies'
 
 export const useUserStore = defineStore('userStore', () => {
+
+  const { getCookie, setCookie } = useCookies()
+
+
+  const accessToken = ref(null)
   const userData = ref({})
   const isLoading = ref(false)
   const isUserNameLoaing = ref(false)
@@ -39,7 +45,14 @@ export const useUserStore = defineStore('userStore', () => {
         // console.log(response)
         return { success: false, error: res.error }
       }
-      console.log(res)
+
+      await setCookie(res.data.cookie)
+      accessToken.value = await getCookie()
+
+      if (!accessToken.value) {
+        return { success: false, error: "Access token is required" }
+      }
+      console.log(accessToken.value)
       await mutate_userData(res.data.userData)
       return { success: true, message: res.data.message }
     } catch (err) {
@@ -59,7 +72,15 @@ export const useUserStore = defineStore('userStore', () => {
       if (res.status !== 200) {
         return { success: false, error: res.error }
       }
-      // console.log(res)
+
+      await setCookie(res.data.cookie)
+      accessToken.value = await getCookie()
+
+      if (!accessToken.value) {
+        return { success: false, error: "Access token is required" }
+      }
+      console.log(accessToken.value)
+
       await mutate_userData(res.data.userData)
       return { success: true, data: res.data.userData, message: res.data.message }
     } catch (err) {
@@ -118,10 +139,22 @@ export const useUserStore = defineStore('userStore', () => {
   // **************************************************** //
 
   //*************get user data code function**************//
-  const getUserData = async (accessToken) => {
+  const getUserData = async () => {
     try {
-      // const accessToken = await getCookies('fintech-access-token')
-      const res = await apiClient.get('/api/get_user_data')
+      const accessToken = await getCookie()
+      if (!accessToken) {
+        console.error("Access token required")
+        return { success: false, error: "Access token required" }
+      }
+
+      // Set the Authorization header with the access token
+      const config = {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      }
+
+      const res = await apiClient.get('/api/get_user_data', config)
       if (res.status !== 200) {
         return { success: false, error: res.error }
       } else if (res.status === 500) {

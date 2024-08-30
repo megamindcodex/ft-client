@@ -1,19 +1,26 @@
+
+import jsCookies from "js-cookie"
+import { cookieName } from "@/constant/cookieName";
 export const useCookies = () => {
-  const getCookies = async (name) => {
+  const getCookie = async () => {
     try {
-      const tokens = `; ${document.cookie}`;
-      const parts = tokens.split(`; ${name}=`);
-      if (parts.length === 2) {
-        return parts.pop().split(';').shift();
-      } else {
-        console.log("Cookie not found");
-        return null;
-      }
+      const accessToken = jsCookies.get(cookieName)
+
+      return accessToken
     } catch (err) {
       console.log(err);
       return null;
     }
   };
 
-  return { getCookies }
+  const setCookie = async (token) => {
+    try {
+      jsCookies.set("fintech-access-token", token, { expires: 1 })
+      return
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  return { getCookie, setCookie }
 }

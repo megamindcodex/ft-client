@@ -8,6 +8,7 @@ import { useNotificationStore } from './sockets/notification'
 import { useRouter } from 'vue-router'
 import { errorMessages } from 'vue/compiler-sfc'
 import { useCookies } from '@/composables/useCookies'
+import { formatDate } from '@vueuse/core'
 
 export const useUserStore = defineStore('userStore', () => {
 
@@ -52,7 +53,7 @@ export const useUserStore = defineStore('userStore', () => {
       if (!accessToken.value) {
         return { success: false, error: "Access token is required" }
       }
-      console.log(accessToken.value)
+      // console.log(accessToken.value)
       await mutate_userData(res.data.userData)
       return { success: true, message: res.data.message }
     } catch (err) {
@@ -79,7 +80,7 @@ export const useUserStore = defineStore('userStore', () => {
       if (!accessToken.value) {
         return { success: false, error: "Access token is required" }
       }
-      console.log(accessToken.value)
+      // console.log(accessToken.value)
 
       await mutate_userData(res.data.userData)
       return { success: true, data: res.data.userData, message: res.data.message }
@@ -141,8 +142,8 @@ export const useUserStore = defineStore('userStore', () => {
   //*************get user data code function**************//
   const getUserData = async () => {
     try {
-      const accessToken = await getCookie()
-      if (!accessToken) {
+      accessToken.value = await getCookie()
+      if (!accessToken.value) {
         console.error("Access token required")
         return { success: false, error: "Access token required" }
       }
@@ -150,7 +151,7 @@ export const useUserStore = defineStore('userStore', () => {
       // Set the Authorization header with the access token
       const config = {
         headers: {
-          Authorization: `Bearer ${accessToken}`
+          Authorization: `Bearer ${accessToken.value}`
         }
       }
 
@@ -214,9 +215,24 @@ export const useUserStore = defineStore('userStore', () => {
   // **************validate Receiver Account Number************//
   const get_receiver_userName = async (accountNumber) => {
     try {
-      // console.log(accountNumber)
+
+      accessToken.value = await getCookie()
+      if (!accessToken) {
+        console.error("Access token required")
+        return { success: false, error: "Access token required" }
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${accessToken.value}`
+        },
+        params: {
+          accountNumber
+        }
+      }
+
       isUserNameLoaing.value = true
-      const res = await apiClient.get('/api/get_receiver_userName', { params: { accountNumber } })
+      const res = await apiClient.get('/api/get_receiver_userName', config)
 
       if (res.status !== 200) {
         isUserNameLoaing.value = false

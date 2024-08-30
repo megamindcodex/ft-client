@@ -25,7 +25,7 @@ const { navigateTo } = navigateStore
 
 const balace = computed(() => {
   if (isBalanceVisible.value && finances.value) {
-    if (!finances.mainBalance) {
+    if (!finances.value.mainBalance) {
       return 0
     } else {
       return finances.value.mainBalance
@@ -84,7 +84,7 @@ onMounted(() => {})
       <!-- **************************************************** -->
 
       <!-- *******Transfer section******* -->
-      <v-card class="transfer-section d-flex flex-column pa-3 mt-4">
+      <v-card class="transfer-section d-flex flex-column pa-3 mt-4" variant="flat">
         <strong class="col-1">Money Transfer</strong>
 
         <div class="col-2 d-flex justify-center ga-11">

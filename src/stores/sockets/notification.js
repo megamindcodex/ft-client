@@ -3,12 +3,16 @@ import { io } from 'socket.io-client'
 import { ref, computed, watchEffect, watch } from "vue";
 import apiClient from "@/api/apiConfig";
 import { useTransferStore } from "../transferStore";
+import { useCookies } from "@/composables/useCookies";
 import { useUserStore } from "../userStore";
 
 export const useNotificationStore = defineStore("notificationStore", () => {
 
     // const notifications = ref([])
 
+    const { getCookie } = useCookies()
+
+    const accessToken = ref(null)
 
     const userStore = useUserStore()
     const { getUserData } = userStore
@@ -142,6 +146,18 @@ export const useNotificationStore = defineStore("notificationStore", () => {
 
     const update_user_Notifications = async () => {
         try {
+            accessToken.value = await getCookie()
+            if (!accessToken.value) {
+                console.error("Access token required")
+                return { success: false, error: "Access token required" }
+            }
+
+            // Set the Authorization header with the access token
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${accessToken.value}`
+                }
+            }
 
             if (notifyDump.value.length === 0) {
                 console.log("notifyDump is empty", err)
@@ -149,7 +165,7 @@ export const useNotificationStore = defineStore("notificationStore", () => {
             }
             const notificationIds = notifyDump.value.map(item => item.subjectId)
             // console.log(notificationIds)
-            const res = await apiClient.put("/api/update_notifications", notificationIds)
+            const res = await apiClient.put("/api/update_notifications", notificationIds, config)
 
             if (res.status === 200) {
                 console.log("user notification updated successfully")

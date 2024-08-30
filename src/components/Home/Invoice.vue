@@ -1,5 +1,5 @@
 <script setup>
-import { defineEmits } from 'vue'
+// import { defineEmits } from 'vue'
 import XcloseSvg from '../icons/XcloseSvg.vue'
 
 const emit = defineEmits(['toggleConfirmPanel', 'transferFunds'])

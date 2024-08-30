@@ -73,7 +73,7 @@ onMounted(async () => {
   // background-color: transparent;
   .col-1 {
     border-bottom: 1px solid #a7a5a5;
-    box-shadow: 0px 0px 15px 0px #a7a5a5;
+    box-shadow: 0px 0px 8px 0px #a7a5a5;
   }
 
   // trans-list

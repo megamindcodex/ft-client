@@ -68,7 +68,11 @@ onMounted(() => {})
         <div class="col-2 col d-flex flex-row justify-space-between align-center">
           <p class="d-flex bal-txt align-center justify-center">
             <!-- <DollarSvg v-if="isBalanceVisible" /> -->
-            <span v-if="isBalanceVisible">$</span>{{ balace }}
+            <span v-if="isBalanceVisible">$</span>
+            <span>{{ balace }}</span>
+            <span v-if="isBalanceVisible">.00</span>
+            <span v-else>*</span>
+            <!-- <span v-else>0</span> -->
           </p>
 
           <button
@@ -87,7 +91,7 @@ onMounted(() => {})
       <v-card class="transfer-section d-flex flex-column pa-3 mt-4" variant="flat">
         <strong class="col-1">Money Transfer</strong>
 
-        <div class="col-2 d-flex justify-center ga-11">
+        <div class="col-2 d-flex justify-center ga-11 mt-2">
           <div
             v-ripple="{ class: 'text-black' }"
             class="row"
@@ -183,7 +187,7 @@ onMounted(() => {})
       // width: 100%;
       // height: 80px;
       display: flex;
-      gap: 6px;
+      gap: 3px;
       flex-direction: column;
       align-items: center;
       justify-content: center;
@@ -197,7 +201,7 @@ onMounted(() => {})
         width: 52px;
         height: 52px;
         border-radius: 50%;
-        background-color: #00000036;
+        background-color: #012b6a36;
         .svg {
           // border: 1px solid blue;
           width: 35px;
@@ -207,6 +211,9 @@ onMounted(() => {})
         }
       }
       span {
+        display: flex;
+        justify-content: center;
+        width: 100%;
         font-size: $font_base + 4;
         font-weight: 500;
         // border: 1px solid red;

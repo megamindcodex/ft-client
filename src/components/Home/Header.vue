@@ -3,9 +3,14 @@
 import { useNavigatorStore } from '@/stores/navigatorStore'
 import BellSvg from '../icons/BellSvg.vue'
 import HeadsetSvg from '../icons/HeadsetSvg.vue'
+import { useUserStore } from '@/stores/userStore'
+import { storeToRefs } from 'pinia'
 
 const navigateStore = useNavigatorStore()
 const { navigateTo } = navigateStore
+
+const userStore = useUserStore()
+const { userData } = storeToRefs(userStore)
 
 defineProps({
   userName: String
@@ -20,7 +25,7 @@ defineProps({
       @click="navigateTo('/me/profile')"
     >
       <div class="dp bg-teal-darken-4"></div>
-      <span class="font-weight-medium">Hi, {{ userName }}</span>
+      <span class="font-weight-medium">Hi, {{ userData.userName }}</span>
     </div>
 
     <div class="row d-flex ga-5 align-center">

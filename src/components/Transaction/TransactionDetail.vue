@@ -1,7 +1,7 @@
 
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/userStore'
 import { useNavigatorStore } from '@/stores/navigatorStore'
@@ -22,6 +22,7 @@ const router = useRouter()
 const id = ref(route.params.id)
 const canGoBack = ref(false)
 const transactionDetail = ref(null)
+const formattedAmount = ref(null)
 const userTimeZone = ref(null)
 const utcTimestamp = ref(null)
 const clientLocalTime = ref(null)
@@ -34,6 +35,11 @@ const getTransactionDetail = async () => {
   clientLocalTime.value = DateTime.fromISO(utcTimestamp.value, { zone: 'utc' })
     .setZone(userTimeZone.value)
     .toLocaleString(DateTime.DATETIME_MED)
+
+  formattedAmount.value = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD'
+  }).format(transactionDetail.value.amount)
 }
 
 onMounted(async () => {
@@ -60,7 +66,7 @@ onMounted(async () => {
         <span v-if="transactionDetail.type === 'debit'" class="name"
           >To {{ transactionDetail.receiver.toUpperCase() }}</span
         >
-        <span class="amount">${{ transactionDetail.amount }}.00</span>
+        <span class="amount">{{ formattedAmount }}</span>
         <small class="status">{{ transactionDetail.status }}</small>
       </v-card>
 

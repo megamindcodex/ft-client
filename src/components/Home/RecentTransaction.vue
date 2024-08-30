@@ -43,8 +43,8 @@ onMounted(async () => {
       >
         <div class="row row-1">
           <div :class="['icon-box', item.type]">
-            <ArrowUpSvg v-if="item.type === 'credit'" class="arrowup-svg" />
-            <ArrowDownSvg v-if="item.type === 'debit'" class="arrowdown-svg" />
+            <ArrowUpSvg v-if="item.type === 'debit'" class="arrowup-svg" />
+            <ArrowDownSvg v-if="item.type === 'credit'" class="arrowdown-svg" />
           </div>
         </div>
         <div class="row row-2">

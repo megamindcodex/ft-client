@@ -28,12 +28,17 @@ const balace = computed(() => {
     if (!finances.value.mainBalance) {
       return 0
     } else {
-      return finances.value.mainBalance
+      const formatted = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD'
+      }).format(finances.value.mainBalance)
+      return formatted
     }
   } else {
     return '****'
   }
 })
+
 //
 onMounted(() => {})
 </script>
@@ -65,14 +70,9 @@ onMounted(() => {})
           </p>
         </div>
 
-        <div class="col-2 col d-flex flex-row justify-space-between align-center">
-          <p class="d-flex bal-txt align-center justify-center">
-            <!-- <DollarSvg v-if="isBalanceVisible" /> -->
-            <span v-if="isBalanceVisible">$</span>
-            <span>{{ balace }}</span>
-            <span v-if="isBalanceVisible">.00</span>
-            <span v-else>*</span>
-            <!-- <span v-else>0</span> -->
+        <div class="col-2 col d-flex flex-row justify-space-between align-center ga-2">
+          <p class="d-flex bal-txt align-center justify-start">
+            {{ balace }}
           </p>
 
           <button
@@ -154,15 +154,23 @@ onMounted(() => {})
           display: flex;
           font-weight: 500;
           font-size: $font_sm;
+
           // justify-self: end;
+        }
+        p {
+          width: 100%;
         }
 
         .add-btn {
           position: relative;
+          display: flex;
+          justify-content: start;
+          align-items: start;
           border: 1px solid black;
           border-radius: $bRadius_xl;
           font-size: $font_base + 4;
           font-weight: 600;
+          width: 60%;
 
           &::before {
             content: '+';

@@ -4,7 +4,8 @@ import { useRouter } from 'vue-router'
 import { useTransferValidator } from '@/composables/useTransferValidator'
 import { useNavigatorStore } from '@/stores/navigatorStore'
 import { useTransferStore } from '@/stores/transferStore'
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
+
 import InvoicePanel from './Invoice.vue'
 import ChevronLeftSvg from '../icons/ChevronLeftSvg.vue'
 
@@ -31,11 +32,32 @@ const toggleConfirmPanel = () => {
     overlay.value = false
   }
 }
+
+// const formattedAmount = ref('')
 const formData = ref({
   accountNumber: '',
   amount: '',
   description: ''
 })
+
+// const formatter = new Intl.NumberFormat('en-US', {
+//   style: 'currency',
+//   currency: 'USD',
+//   minimumFractionDigits: 2,
+//   maximumFractionDigits: 2
+// })
+
+// const formatAmount = () => {
+//   const cleanedValue = formattedAmount.value.replace(/[^0-9.-]+/g, '')
+//   formData.value.amount = cleanedValue
+//   formattedAmount.value = formatter.format(cleanedValue)
+// }
+
+// watch(formattedAmount, (newVal) => {
+//   formData.value.amount = newVal
+// })
+
+// console.log(formatted)
 
 // All fields validation result
 const accountNumberValidation = ref({ valid: false, error: false, message: '' })
@@ -147,8 +169,8 @@ const submitForm = async () => {
               <input
                 type="text"
                 id="amount"
-                placeholder="Ente Amount "
                 v-model="formData.amount"
+                placeholder="Enter Amount "
                 class="pl-6"
                 @input="validateFiled('amount')"
               />

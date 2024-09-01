@@ -23,7 +23,7 @@ const isBalanceVisible = ref(true)
 const navigateStore = useNavigatorStore()
 const { navigateTo } = navigateStore
 
-const balace = computed(() => {
+const balance = computed(() => {
   if (isBalanceVisible.value && finances.value) {
     if (!finances.value.mainBalance) {
       return 0
@@ -40,7 +40,9 @@ const balace = computed(() => {
 })
 
 //
-onMounted(() => {})
+onMounted(() => {
+  console.log(finances.value.mainBalance.toString().length)
+})
 </script>
 <template>
   <v-container class="cont pa-0 bg-grey-lighten-2 d-flex flex-column justify-center">
@@ -71,8 +73,17 @@ onMounted(() => {})
         </div>
 
         <div class="col-2 col d-flex flex-row justify-space-between align-center ga-2">
-          <p class="d-flex bal-txt align-center justify-start">
-            {{ balace }}
+          <p
+            class="d-flex bal-txt align-center justify-start"
+            :class="{
+              _3figure: finances.mainBalance.toString().length <= 3,
+              _4figure: finances.mainBalance.toString().length === 4,
+              _5figure: finances.mainBalance.toString().length === 5,
+              _6figure: finances.mainBalance.toString().length === 6,
+              _7figure: finances.mainBalance.toString().length >= 9
+            }"
+          >
+            {{ balance }}
           </p>
 
           <button
@@ -153,12 +164,29 @@ onMounted(() => {})
         .bal-txt {
           display: flex;
           font-weight: 500;
-          font-size: $font_sm;
+          // font-size: $font_sm;
 
           // justify-self: end;
         }
         p {
           width: 100%;
+        }
+
+        ._3figure {
+          font-size: 2rem;
+          color: red;
+        }
+        ._4figure {
+          font-size: 1.5rem;
+        }
+        ._5figure {
+          font-size: 1.6rem;
+        }
+        ._6figure {
+          font-size: 1rem;
+        }
+        ._7figure {
+          font-size: 0.8rem;
         }
 
         .add-btn {

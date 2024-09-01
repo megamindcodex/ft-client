@@ -67,9 +67,9 @@ onMounted(async () => {
     <!-- <v-btn @click="isLoading = !isLoading">toggle Loading</v-btn> -->
     <!-- <RouterView v-if="!isLoading" v-motion-slide-visible-bottom /> -->
     <!-- <NavBar v-if="!isLoading" /> -->
-    <RouterView />
+    <RouterView v-if="!isLoading" />
     <NavBar />
-    <!-- <SplashScreen v-if="isLoading" /> -->
+    <SplashScreen v-if="isLoading" />
   </v-app>
 </template>
 

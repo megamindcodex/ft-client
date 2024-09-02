@@ -1,37 +1,54 @@
 <script setup>
 // import { defineEmits } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { useTransferStore } from '@/stores/transferStore'
 import XcloseSvg from '../icons/XcloseSvg.vue'
 
+const transferStore = useTransferStore()
+const { close_paymentError } = transferStore
+
 const emit = defineEmits(['toggleConfirmPanel', 'transferFunds'])
-defineProps({
-  prePaidInfo: Object
+const props = defineProps({
+  prePaidInfo: Object,
+  processingPayment: Boolean
+})
+// console.log(prePaidInfo)
+
+const processing = ref(false)
+
+const amount = computed(() => {
+  const formatted = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD'
+  }).format(props.prePaidInfo.amount)
+  return formatted
 })
 </script>
 <template>
   <v-container class="card-cont d-flex flex-column align-end justify-end ga-2 pa-4">
     <div class="col-1 d-flex justify-center align-center flex-column mt-4">
       <strong class="text-h6">Payment</strong>
-      <span class="amount-txt mt-2">${{ prePaidInfo.amount }}.00</span>
+      <span class="amount-txt mt-2">{{ amount }}</span>
     </div>
-    <XcloseSvg class="svg" @click="emit('toggleConfirmPanel')" />
+    <XcloseSvg class="xClose-svg" @click="emit('toggleConfirmPanel')" />
 
     <!-- *********************************************** -->
     <v-card variant="flat" class="col-2 confirm-card d-flex flex-column ga-2 pa-4 mt-2">
       <p>
         <span class="text-grey-darken-3">Amount</span>
-        <span class="font-weight-medium">${{ prePaidInfo.amount }}.00</span>
+        <span class="font-weight-medium">${{ amount }}.00</span>
       </p>
       <p>
         <span class="text-grey-darken-3">Account number</span>
-        <span class="font-weight-medium">{{ prePaidInfo.accountNumber }}</span>
+        <span class="font-weight-medium">{{ props.prePaidInfo.accountNumber }}</span>
       </p>
       <p>
         <span class="text-grey-darken-3">Recipient</span>
-        <span class="font-weight-medium">{{ prePaidInfo.receiver }}</span>
+        <span class="font-weight-medium">{{ props.prePaidInfo.receiver }}</span>
       </p>
       <p>
         <span class="text-grey-darken-3">Remark</span>
-        <span class="font-weight-medium">{{ prePaidInfo.description }}</span>
+        <span class="font-weight-medium">{{ props.prePaidInfo.description }}</span>
       </p>
     </v-card>
     <div class="pay-btn mt-2">
@@ -39,6 +56,19 @@ defineProps({
         Pay
       </button>
     </div>
+    <v-dialog persistent fullscreen v-model="props.processingPayment" class="process-cont">
+      <div class="process-box d-flex align-center justify-center">
+        <div class="row">
+          <v-progress-circular
+            size="40"
+            width="2"
+            color="white"
+            indeterminate
+          ></v-progress-circular>
+          <span>payment processing...</span>
+        </div>
+      </div>
+    </v-dialog>
   </v-container>
 </template>
 <style lang="scss" scoped>
@@ -75,7 +105,7 @@ defineProps({
     }
   }
 
-  .svg {
+  .xClose-svg {
     position: absolute;
     top: 1rem;
     left: 1rem;
@@ -106,5 +136,31 @@ defineProps({
       }
     }
   }
+}
+
+.process-cont {
+  background-color: none;
+  .process-box {
+    width: 100%;
+    height: 100%;
+
+    div {
+      width: 180px;
+      height: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #12766c4a;
+      border-radius: 10px;
+      span {
+        color: #ffffffcc;
+        border-radius: 10px;
+        padding: 0.5rem;
+        font-size: 4dvw;
+      }
+    }
+  }
+  // z-index: 1;
 }
 </style>

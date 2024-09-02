@@ -1,5 +1,3 @@
-
-
 <script setup>
 import { onMounted, ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -28,7 +26,7 @@ const utcTimestamp = ref(null)
 const clientLocalTime = ref(null)
 
 const getTransactionDetail = async () => {
-  await getUserData()
+  // await getUserData()
   transactionDetail.value = transactions.value.find((item) => item.transactionId === id.value)
   utcTimestamp.value = transactionDetail.value.timestamp
   userTimeZone.value = Intl.DateTimeFormat().resolvedOptions().timeZone

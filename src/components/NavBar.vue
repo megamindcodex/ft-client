@@ -2,6 +2,8 @@
 <script setup>
 import { onMounted, reactive } from 'vue'
 
+import { useUserStore } from '@/stores/userStore'
+
 import { useNavigatorStore } from '@/stores/navigatorStore'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -9,12 +11,16 @@ import { useRoute, useRouter } from 'vue-router'
 import HomeSvg from '@/components/icons/navicons/HomeSvg.vue'
 import FinanceSvg from '@/components/icons/navicons/financeSvg.vue'
 import MeSvg from '@/components/icons/navicons/MeSvg.vue'
+import { storeToRefs } from 'pinia'
 
 const route = useRoute()
 // console.log(route.name)
 
 const navigatorStore = useNavigatorStore()
 const { navigateTo } = navigatorStore
+
+const userStore = useUserStore()
+const { isUserDataLoading } = storeToRefs(userStore)
 
 const checkVisibility = () => {
   let isVisible

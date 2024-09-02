@@ -23,8 +23,8 @@ const { applyTheme, toggleTheme } = globalStore
 const { themeTxt } = storeToRefs(globalStore)
 
 const userStore = useUserStore()
-const { getUserData, connect_to_websockets } = userStore
-const { userData } = storeToRefs(userStore)
+const { load_user_data, connect_to_websockets } = userStore
+const { userData, isUserDataLoading } = storeToRefs(userStore)
 
 const notificationStore = useNotificationStore()
 const { filter_new_notifications, remove_notification_item } = notificationStore
@@ -33,17 +33,6 @@ const { newNotifications, notifyQueue } = storeToRefs(notificationStore)
 const router = useRouter()
 const route = useRoute()
 const isLoading = ref(false)
-
-const load_user_data = async () => {
-  isLoading.value = true
-  const res = await getUserData()
-
-  if (res.success === false) {
-    isLoading.value = false
-  }
-
-  isLoading.value = false
-}
 
 // console.log(route)
 
@@ -67,9 +56,9 @@ onMounted(async () => {
     <!-- <v-btn @click="isLoading = !isLoading">toggle Loading</v-btn> -->
     <!-- <RouterView v-if="!isLoading" v-motion-slide-visible-bottom /> -->
     <!-- <NavBar v-if="!isLoading" /> -->
-    <RouterView v-if="!isLoading" />
-    <NavBar />
-    <SplashScreen v-if="isLoading" />
+    <RouterView v-if="!isUserDataLoading" />
+    <NavBar v-if="!isUserDataLoading" />
+    <SplashScreen v-if="isUserDataLoading" />
   </v-app>
 </template>
 

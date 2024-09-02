@@ -1,25 +1,33 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-import { useTransferValidator } from '@/composables/useTransferValidator'
+import { useTransferValidatorStore } from '@/stores/useTransferValidatorStore'
 import { useNavigatorStore } from '@/stores/navigatorStore'
 import { useTransferStore } from '@/stores/transferStore'
 import { computed, reactive, ref, watch } from 'vue'
+import { storeToRefs } from 'pinia'
 
 import InvoicePanel from './Invoice.vue'
 import ChevronLeftSvg from '../icons/ChevronLeftSvg.vue'
+import XcloseSvg from '../icons/XcloseSvg.vue'
 
 const navigateStore = useNavigatorStore()
-const { navigateTo, isUserNameLoading } = navigateStore
-const { validate_accountNumber, validate_amount } = useTransferValidator()
+const { navigateTo } = navigateStore
+
+const transferValidatorStore = useTransferValidatorStore()
+const { validate_accountNumber, validate_amount } = transferValidatorStore
+const { isUserNameLoading } = storeToRefs(transferValidatorStore)
+// const {isLoading} =
 
 const transferStore = useTransferStore()
-const { transfer_funds } = transferStore
+const { transfer_funds, close_paymentError } = transferStore
+const { processingPayment, transferErrorInfo } = storeToRefs(transferStore)
 
 const router = useRouter()
 const displayInvoice = ref(false)
 const overlay = ref(false)
 const receiver = ref(null)
+const isInvoiceLoading = ref(false)
 
 const toggleConfirmPanel = () => {
   if (overlay.value === false) {
@@ -39,25 +47,6 @@ const formData = ref({
   amount: '',
   description: ''
 })
-
-// const formatter = new Intl.NumberFormat('en-US', {
-//   style: 'currency',
-//   currency: 'USD',
-//   minimumFractionDigits: 2,
-//   maximumFractionDigits: 2
-// })
-
-// const formatAmount = () => {
-//   const cleanedValue = formattedAmount.value.replace(/[^0-9.-]+/g, '')
-//   formData.value.amount = cleanedValue
-//   formattedAmount.value = formatter.format(cleanedValue)
-// }
-
-// watch(formattedAmount, (newVal) => {
-//   formData.value.amount = newVal
-// })
-
-// console.log(formatted)
 
 // All fields validation result
 const accountNumberValidation = ref({ valid: false, error: false, message: '' })
@@ -102,12 +91,15 @@ const isDisabled = computed(() => {
 
 // submit form
 const submitForm = async () => {
+  isInvoiceLoading.value = true
   const isFormValid = await validateForm()
 
   if (!isFormValid) {
+    isInvoiceLoading.value = false
     return console.error('Transafer Form is not vaid!')
   }
 
+  isInvoiceLoading.value = false
   console.log('Transafer Form is vad!')
   return toggleConfirmPanel()
 }
@@ -148,13 +140,17 @@ const submitForm = async () => {
             <div class="input-details">
               <v-progress-circular
                 v-if="isUserNameLoading"
-                :size="30"
-                color="primary"
+                size="20"
+                width="2"
+                color="success"
                 indeterminate
               ></v-progress-circular>
-              <span v-if="accountNumberValidation.error" class="error-msg">{{
-                accountNumberValidation.message
-              }}</span>
+              <span
+                v-if="accountNumberValidation.error"
+                v-show="!isUserNameLoading"
+                class="error-msg"
+                >{{ accountNumberValidation.message }}</span
+              >
               <span class="info-msg" v-else>{{
                 accountNumberValidation.message.toUpperCase()
               }}</span>
@@ -216,6 +212,7 @@ const submitForm = async () => {
       <InvoicePanel
         v-if="displayInvoice"
         :prePaidInfo="invoice"
+        :processingPayment="processingPayment"
         @toggleConfirmPanel="toggleConfirmPanel"
         @transferFunds="
           transfer_funds(formData, {
@@ -225,9 +222,24 @@ const submitForm = async () => {
           })
         "
       />
+
+      <v-dialog persistent v-model="transferErrorInfo.error" class="payment-error-dialog">
+        <div class="payment-error-cont">
+          <XcloseSvg class="xClose-svg" @click="close_paymentError" />
+          <span class="font-weight-medium">{{ transferErrorInfo.errorMsg }}</span>
+          <span class="try-again" @click="close_paymentError">Try again</span>
+        </div>
+      </v-dialog>
+    </v-dialog>
+
+    <v-dialog v-model="isInvoiceLoading" class="InvoicePanel-dialog" v-if="isInvoiceLoading">
+      <div class="w-100 d-flex flex-column justify-center align-center ga-4">
+        <v-progress-circular size="60" width="4" color="info" indeterminate></v-progress-circular>
+        <span class="text-white text-h5">Initializing payment...</span>
+      </div>
     </v-dialog>
   </v-container>
-</template>
+</template> 
 
 <style lang="scss" scoped>
 @import '../../styles/format';
@@ -395,4 +407,56 @@ const submitForm = async () => {
   height: 1px;
   background-color: #8c8989;
 }
-</style>
+
+.InvoicePanel-dialog {
+  background-color: #ffffff00;
+}
+
+.payment-error-dialog {
+  width: 100%;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .payment-error-cont {
+    position: relative;
+    align-self: center;
+    justify-self: center;
+    height: 140px;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+    justify-content: space-between;
+    font-size: $font_base + 8;
+    color: #c51723;
+    background-color: #eaeaea;
+    border: 2px solid #c51723;
+    border-radius: $bRadius_sm + 2;
+    padding: 1rem;
+
+    span {
+      text-align: center;
+    }
+
+    .try-again {
+      color: black;
+      border-radius: 3px;
+      background-color: #dad5d5;
+      padding: 3px;
+    }
+  }
+}
+
+.xClose-svg {
+  position: absolute;
+  top: 0.5rem;
+  left: 0;
+  width: 30px;
+  height: 30px;
+  stroke: #696767;
+  stroke-width: 1.8;
+  z-index: 1;
+}
+</style> 

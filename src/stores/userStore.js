@@ -18,6 +18,7 @@ export const useUserStore = defineStore('userStore', () => {
   const accessToken = ref(null)
   const userData = ref({})
   const isLoading = ref(false)
+  const isUserDataLoading = ref(false)
   const isUserNameLoaing = ref(false)
   const router = useRouter()
 
@@ -90,6 +91,7 @@ export const useUserStore = defineStore('userStore', () => {
     }
   }
   // ************************************************************* //
+
 
   // *********************send reset code Function*************** //
   const send_reset_code = async (email) => {
@@ -174,12 +176,25 @@ export const useUserStore = defineStore('userStore', () => {
   }
   // ******************************************************** //
 
+  // ********************Load user data code function****************//
+  const load_user_data = async () => {
+    isUserDataLoading.value = true
+    const res = await getUserData()
+
+    if (res.success === false) {
+      isUserDataLoading.value = false
+    }
+
+    isUserDataLoading.value = false
+  }
+  // ************************************************************* //
+
 
   // **************Mutate userData************//
 
   const mutate_userData = async (data) => {
     try {
-      console.log("userData mutation")
+      console.log("userData mutation", data)
 
       if (!userData.value) {
         return console.log("userData is empty")
@@ -239,10 +254,10 @@ export const useUserStore = defineStore('userStore', () => {
         return { success: false, error: res.error }
       }
 
-      isLoading.value = false
+      isUserNameLoaing.value = false
       return { success: true, data: res.data }
     } catch (err) {
-      isLoading.value = false
+      isUserNameLoaing.value = false
       console.log('Error getting receiver User name', err.response.data.error)
       return { success: false, error: err.response.data.error }
     }
@@ -252,6 +267,7 @@ export const useUserStore = defineStore('userStore', () => {
     userData,
     finances,
     isLoading,
+    isUserDataLoading,
     isUserNameLoaing,
     transactions,
     notifications,
@@ -259,6 +275,7 @@ export const useUserStore = defineStore('userStore', () => {
     registerUser,
     loginUser,
     getUserData,
+    load_user_data,
     mutate_userData,
     connect_to_websockets,
     send_reset_code,

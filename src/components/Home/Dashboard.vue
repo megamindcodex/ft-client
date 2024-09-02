@@ -41,7 +41,7 @@ const balance = computed(() => {
 
 //
 onMounted(() => {
-  console.log(finances.value.mainBalance.toString().length)
+  // console.log(finances.value.mainBalance.toString().length)
 })
 </script>
 <template>
@@ -183,10 +183,10 @@ onMounted(() => {
           font-size: 1.6rem;
         }
         ._6figure {
-          font-size: 1rem;
+          font-size: 1.3rem;
         }
         ._7figure {
-          font-size: 0.8rem;
+          font-size: 1.3rem;
         }
 
         .add-btn {

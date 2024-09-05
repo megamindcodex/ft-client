@@ -53,9 +53,6 @@ onMounted(async () => {
     </Teleport>
 
     <!-- <button @click="toggleTheme">{{ themeTxt }}</button> -->
-    <!-- <v-btn @click="isLoading = !isLoading">toggle Loading</v-btn> -->
-    <!-- <RouterView v-if="!isLoading" v-motion-slide-visible-bottom /> -->
-    <!-- <NavBar v-if="!isLoading" /> -->
     <RouterView v-if="!isUserDataLoading" />
     <NavBar v-if="!isUserDataLoading" />
     <SplashScreen v-if="isUserDataLoading" />

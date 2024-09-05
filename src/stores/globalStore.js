@@ -11,8 +11,7 @@ export const useGlobalStore = defineStore('globalStore', () => {
   const router = useRouter()
 
   const applyTheme = () => {
-    // theme.value = isDarkTheme.value ? 'dark-theme' : 'light-theme' 
-    theme.value = isDarkTheme.value ? 'light-theme' : 'light-theme' // remeber to comback to currect this
+    theme.value = isDarkTheme.value ? 'dark-theme' : 'light-theme'
     themeTxt.value = isDarkTheme.value ? 'light-theme' : 'dark-theme'
 
     const el = document.getElementById('main')

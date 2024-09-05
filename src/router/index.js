@@ -8,6 +8,11 @@ import TransactionsHistoryView from '@/views/TransactionsHistoryView.vue'
 import TransactionHistory from '@/components/Transaction/TransactionHistory.vue'
 import TransactionDetail from '@/components/Transaction/TransactionDetail.vue'
 
+import Me from "@/components/Me/Me.vue"
+
+import TransferToBank from "@/components/Transaction/TransferToBank.vue"
+import TransferCrypto from '@/components/Transaction/TransferCrypto.vue'
+
 import AuthPage from '@/views/auth/AuthPage.vue'
 
 const { getCookie } = useCookies()
@@ -37,7 +42,15 @@ const router = createRouter({
         },
         {
           path: 'transfer-to-bitpay',
-          component: () => import('../components/Home/TransferToBitpay.vue')
+          component: () => import('../components/Transaction/TransferToBitpay.vue')
+        },
+        {
+          path: "transfer-to-bank",
+          component: TransferToBank
+        },
+        {
+          path: "transfer-crypto",
+          component: TransferCrypto
         },
         {
           path: "/notifications",
@@ -51,15 +64,20 @@ const router = createRouter({
       component: () => import('@/views/FinanceView.vue')
     },
     {
-      path: '/me',
-      name: 'me',
-      default: () => import("@/views/MePageView.vue"),
-      component: () => import('../views/MePageView.vue'),
+      path: '/account',
+      name: 'account',
+      default: () => import("@/views/AccountView.vue"),
+      component: () => import('../views/AccountView.vue'),
       children: [
         {
           path: "profile",
           name: 'profile',
           component: () => import("@/components/Me/ProfilePage.vue")
+        },
+        {
+          path: "me",
+          name: "me",
+          component: Me
         }
       ]
     },

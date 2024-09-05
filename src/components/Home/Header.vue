@@ -22,7 +22,7 @@ defineProps({
     <div
       class="row d-flex align-center ga-2"
       v-ripple="{ class: 'text-black' }"
-      @click="navigateTo('/me/profile')"
+      @click="navigateTo('/account/profile')"
     >
       <div class="dp bg-teal-darken-4"></div>
       <span class="font-weight-medium">Hi, {{ userData.userName }}</span>

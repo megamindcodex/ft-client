@@ -65,8 +65,8 @@ onMounted(() => {})
       <span>Finance</span>
     </div>
     <div
-      :class="['nav-item', { 'active-nav-item': route.path === '/me' }]"
-      @click="navigateTo('/me')"
+      :class="['nav-item', { 'active-nav-item': route.path === '/account/me' }]"
+      @click="navigateTo('/account/me')"
     >
       <MeSvg />
       <span>Me</span>

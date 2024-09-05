@@ -113,13 +113,21 @@ onMounted(() => {
             </div>
             <span>To BitPay</span>
           </div>
-          <div v-ripple="{ class: 'text-black' }" class="row" @click="navigateTo('#')">
+          <div
+            v-ripple="{ class: 'text-black' }"
+            class="row"
+            @click="navigateTo('transfer-to-bank')"
+          >
             <div class="icon-box">
               <BankSvg class="svg" />
             </div>
             <span>To bank</span>
           </div>
-          <div v-ripple="{ class: 'text-black' }" class="row" @click="navigateTo('#')">
+          <div
+            v-ripple="{ class: 'text-black' }"
+            class="row"
+            @click="navigateTo('transfer-crypto')"
+          >
             <div class="icon-box">
               <CryptoSvg class="svg" />
             </div>

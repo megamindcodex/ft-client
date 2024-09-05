@@ -7,7 +7,7 @@ import { useTransferStore } from '@/stores/transferStore'
 import { computed, reactive, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 
-import InvoicePanel from './Invoice.vue'
+import InvoicePanel from '../Home/Invoice.vue'
 import ChevronLeftSvg from '../icons/ChevronLeftSvg.vue'
 import XcloseSvg from '../icons/XcloseSvg.vue'
 

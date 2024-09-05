@@ -52,7 +52,7 @@ const log_out = async () => {
 </script>
 
 <template>
-  <v-container class="cont pa-0">
+  <v-container class="cont pa-0 pb-10">
     <header class="d-flex align-center justify-space-between py-5 px-3">
       <div
         class="row d-flex align-center ga-2"
@@ -154,6 +154,7 @@ const log_out = async () => {
 
 .cont {
   width: 100%;
+  height: 100dvh;
   header {
     position: sticky;
     top: 0;

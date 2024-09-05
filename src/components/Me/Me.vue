@@ -52,7 +52,7 @@ const log_out = async () => {
 </script>
 
 <template>
-  <v-container class="cont pa-0 pb-10">
+  <v-container class="cont pa-0">
     <header class="d-flex align-center justify-space-between py-5 px-3">
       <div
         class="row d-flex align-center ga-2"
@@ -155,6 +155,7 @@ const log_out = async () => {
 .cont {
   width: 100%;
   height: 100dvh;
+  margin-bottom: 10rem;
   header {
     position: sticky;
     top: 0;
@@ -178,6 +179,7 @@ const log_out = async () => {
 
   .card-cont {
     width: 100%;
+    // height: 100vw;
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -256,7 +258,7 @@ const log_out = async () => {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 3rem;
+    margin-top: 2rem;
 
     button {
       width: 100%;

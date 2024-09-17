@@ -422,7 +422,6 @@ const submitForm = async () => {
     position: relative;
     align-self: center;
     justify-self: center;
-    height: 140px;
     width: 80%;
     display: flex;
     flex-direction: column;

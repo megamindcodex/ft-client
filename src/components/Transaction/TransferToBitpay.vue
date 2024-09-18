@@ -4,8 +4,11 @@ import { useRouter } from 'vue-router'
 import { useTransferValidatorStore } from '@/stores/useTransferValidatorStore'
 import { useNavigatorStore } from '@/stores/navigatorStore'
 import { useTransferStore } from '@/stores/transferStore'
+import { useUserStore } from '@/stores/userStore'
 import { computed, reactive, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
+
+import Beneficiaries from './Beneficiaries.vue'
 
 import InvoicePanel from '../Home/Invoice.vue'
 import ChevronLeftSvg from '../icons/ChevronLeftSvg.vue'
@@ -13,6 +16,9 @@ import XcloseSvg from '../icons/XcloseSvg.vue'
 
 const navigateStore = useNavigatorStore()
 const { navigateTo } = navigateStore
+
+const userStore = useUserStore()
+const { finances } = storeToRefs(userStore)
 
 const transferValidatorStore = useTransferValidatorStore()
 const { validate_accountNumber, validate_amount } = transferValidatorStore
@@ -103,6 +109,18 @@ const submitForm = async () => {
   console.log('Transafer Form is vad!')
   return toggleConfirmPanel()
 }
+
+const useBeneficiary = async (accountNumber) => {
+  formData.value.accountNumber = accountNumber
+  await validateFiled('account-number')
+  console.log(accountNumber)
+}
+
+// watch(formData.value.accountNumber, async () => {
+//   if (formData.value.accountNumber.length === 10) {
+//     await validateFiled('account-number')
+//   }
+// })
 </script> 
 <template>
   <v-container class="cont pa-0 bg-grey-lighten-2">
@@ -199,6 +217,7 @@ const submitForm = async () => {
           </div>
         </v-form>
       </v-card>
+      <Beneficiaries :beneficiaries="finances.beneficiaries" @useBneficiary="useBeneficiary" />
     </v-container>
 
     <!--************ Confirm payment/Invoice Dialog **************-->

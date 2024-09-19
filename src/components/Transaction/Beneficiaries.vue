@@ -25,7 +25,7 @@ const useBeneficiary = (accountNumber) => {
       <strong> Beneficiaries </strong>
     </div>
 
-    <div class="col-2 beneficiaries d-flex flex-column ga-2 justify-center">
+    <div class="col-2 beneficiaries d-flex flex-column ga-2">
       <div
         v-ripple="{ class: 'text-black' }"
         class="beneficiar-item d-flex ga-4 pl-5 pa-2"

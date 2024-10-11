@@ -57,13 +57,13 @@ onMounted(() => {})
       <HomeSvg />
       <span>Home</span>
     </div>
-    <div
+    <!-- <div
       :class="['nav-item', { 'active-nav-item': route.path === '/finance' }]"
       @click="navigateTo('/finance')"
     >
       <FinanceSvg />
       <span>Finance</span>
-    </div>
+    </div> -->
     <div
       :class="['nav-item', { 'active-nav-item': route.path === '/account/me' }]"
       @click="navigateTo('/account/me')"
@@ -83,15 +83,15 @@ onMounted(() => {})
   width: 100%;
   max-width: 500px;
   display: flex;
-  gap: 1rem;
+  gap: 3rem;
   justify-content: center;
   align-items: center;
   background-color: #ffff;
-  //   background-color: gray;
+  // background-color: gray;
   // border: 1px solid red;
 
   .nav-item {
-    width: 100%;
+    width: 30%;
     display: flex;
     flex-direction: column;
     justify-content: center;

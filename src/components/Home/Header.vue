@@ -43,7 +43,7 @@ header {
   z-index: 1;
   width: 100%;
   background-color: #fff;
-  box-shadow: 0px 0px 15px 0px #a7a5a5;
+  // box-shadow: 0px 0px 15px 0px #a7a5a5;
   //border: 1px solid green;
 }
 

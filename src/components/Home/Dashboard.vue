@@ -86,14 +86,14 @@ onMounted(() => {
             {{ balance }}
           </p>
 
-          <button
+          <!-- <button
             variant="flat"
             v-ripple="{ class: 'text-black' }"
             class="add-btn px-3 py-1"
             @click="navigateTo('#')"
           >
             Add Money
-          </button>
+          </button> -->
         </div>
       </v-card>
       <!-- **************************************************** -->
@@ -245,7 +245,8 @@ onMounted(() => {
         width: 52px;
         height: 52px;
         border-radius: 50%;
-        background-color: #012b6a36;
+        // background-color: #012b6a36;
+        border: 2px solid black;
         .svg {
           // border: 1px solid blue;
           width: 35px;
@@ -259,7 +260,7 @@ onMounted(() => {
         justify-content: center;
         width: 100%;
         font-size: $font_base + 4;
-        font-weight: 500;
+        font-weight: 600;
         // border: 1px solid red;
       }
     }

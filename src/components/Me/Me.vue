@@ -105,7 +105,7 @@ const log_out = async () => {
         <ChevronRightSvg class="chevronRight-svg" />
       </v-card>
 
-      <v-card
+      <!-- <v-card
         class="row theme-switch"
         variant="flat"
         v-ripple="{ class: 'text-black' }"
@@ -114,7 +114,7 @@ const log_out = async () => {
         <MoonSvg class="moon-svg" />
         <span>Theme</span>
         <ChevronRightSvg class="chevronRight-svg" />
-      </v-card>
+      </v-card> -->
 
       <v-card class="row customer-service" variant="flat" v-ripple="{ class: 'text-black' }">
         <HeadsetSvg />
@@ -162,7 +162,7 @@ const log_out = async () => {
     left: 0;
     z-index: 1;
     width: 100%;
-    background-color: transparent;
+    background-color: #fff;
     //   box-shadow: 0px 0px 15px 0px #a7a5a5;
     //border: 1px solid green;
 

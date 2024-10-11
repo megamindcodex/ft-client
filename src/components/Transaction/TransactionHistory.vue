@@ -33,7 +33,7 @@ onMounted(async () => {
 
     <v-card
       v-if="transactions.length > 0"
-      class="transaction-list d-flex flex-column"
+      class="transaction-list d-flex flex-column ga-1"
       variant="flat"
     >
       <div
@@ -73,6 +73,7 @@ onMounted(async () => {
   gap: 0.5rem;
   width: 100%;
   padding: $padding_base - 2;
+  background-color: #ebebeb;
 
   header {
     position: sticky;
@@ -80,7 +81,7 @@ onMounted(async () => {
     z-index: 1;
     background-color: #fff;
     border-bottom: 1px solid #8c8989;
-    box-shadow: 0px 0px 15px 0px #a7a5a5;
+    // box-shadow: 0px 0px 15px 0px #a7a5a5;
   }
 
   .transaction-list {
@@ -93,7 +94,8 @@ onMounted(async () => {
       display: flex;
       gap: 0.7rem;
       align-items: center;
-      border-bottom: 1px solid #8c8989;
+      // border-bottom: 1px solid #8c8989;
+      background-color: #ffffff;
       .row {
         width: 100%;
         span {

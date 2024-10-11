@@ -73,14 +73,13 @@ onMounted(async () => {
   // background-color: transparent;
   .col-1 {
     border-bottom: 1px solid #a7a5a5;
-    box-shadow: 0px 0px 8px 0px #a7a5a5;
+    // box-shadow: 0px 0px 8px 0px #a7a5a5;
   }
 
   // trans-list
 
   .transaction-list {
     width: 100%;
-    min-height: fit-content;
     height: 40vh;
     overflow-y: auto;
     border-radius: 0px;

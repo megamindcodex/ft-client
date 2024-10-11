@@ -7,4 +7,22 @@ $text-light: scale-color($mainColor, $lightness: 88%);
   background-color: $bg-dark;
   color: $text-light;
   transition: 0.6s ease-in;
+
+
+  div {
+    background-color: #000;
+    color: #fff;
+
+    div {
+      color: #fff;
+    }
+    
+    span {
+      color: #fff;
+    }
+    
+    button {
+      color: #fff;
+    }
+  }  
 }

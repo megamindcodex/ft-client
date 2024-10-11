@@ -142,6 +142,10 @@ onMounted(async () => {
           justify-self: start;
           color: #000;
           font-weight: 500;
+          width: 200px; /* Set the width to the desired limit */
+          white-space: nowrap; /* Prevent the text from wrapping */
+          overflow: hidden; /* Hide the overflow */
+          text-overflow: ellipsis; /* Add the "..." for overflowed text */
         }
         // border: 1px solid red;
       }

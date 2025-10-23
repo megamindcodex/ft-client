@@ -150,7 +150,7 @@ const useBeneficiary = async (accountNumber) => {
               <input
                 type="text"
                 id="account-number"
-                placeholder="Enter 7-digit Account Number"
+                placeholder="Enter 10-digit Account Number"
                 v-model="formData.accountNumber"
                 @input="validateFiled('account-number')"
               />

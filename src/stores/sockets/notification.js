@@ -44,6 +44,8 @@ export const useNotificationStore = defineStore("notificationStore", () => {
 
     socket.on("credit-alert", async (notifyData) => {
         await getUserData()
+        const userData = userStore.userData
+        console.log(userData)
         await filter_new_notifications()
         console.log(notifyData.message)
     })

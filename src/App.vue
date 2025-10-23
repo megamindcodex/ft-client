@@ -40,7 +40,7 @@ onMounted(async () => {
   await load_user_data()
   await connect_to_websockets(userData.value.userName)
   await filter_new_notifications()
-  applyTheme()
+  // applyTheme()
 })
 </script>
 
